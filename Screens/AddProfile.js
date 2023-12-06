@@ -23,6 +23,7 @@ export default function AddProfile({ navigation }) {
   const [emailid, setemailid] = useState("");
   const [Name, setName] = useState("");
   const [mobile, setmobile] = useState("");
+  const [Invalied, setInvalied] = useState("false");
 
   const usergetdata = auth().currentUser;
 
@@ -75,6 +76,21 @@ export default function AddProfile({ navigation }) {
           value={emailid}
           onChangeText={(txt) => setemailid(txt)}
         />
+        {Invalied == "true" ? (
+          <Text
+            style={{
+              color: "red",
+              marginLeft: 20,
+              marginTop: 20,
+              fontWeight: "400",
+              fontSize: 13,
+            }}
+          >
+            *Invalid data, Please enter a valid data.
+          </Text>
+        ) : (
+          <View />
+        )}
 
         <TouchableOpacity
           style={{
@@ -92,8 +108,10 @@ export default function AddProfile({ navigation }) {
             // bottom: 30,
           }}
           onPress={() => {
-            if (Name != "" && emailid != "" && mobile != "") {
+            if (Name != "" && emailid != "" && mobile.length == 10) {
               AddProfileData();
+            } else {
+              setInvalied("true");
             }
           }}
         >

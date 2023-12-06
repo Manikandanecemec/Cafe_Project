@@ -13,6 +13,7 @@ import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import { COLORS, icon } from "../Constant";
+import { useIsFocused } from "@react-navigation/native";
 
 const screenHeight = Dimensions.get("window").height;
 
@@ -21,6 +22,7 @@ export default function Profile({ navigation }) {
   const [mobilenumber, setmobilenumber] = useState("");
   const [profile, setprofile] = useState("false");
   const [Email, setEmail] = useState("");
+  const isFocused = useIsFocused();
   const [imageuri, setimageuri] = useState(
     require("../assets/ProfileImage.png")
   );
@@ -32,8 +34,8 @@ export default function Profile({ navigation }) {
 
   useEffect(() => {
     // getItem();
-    console.log(user.phoneNumber);
-    console.log("data");
+    // console.log(user.phoneNumber);
+    // console.log("data");
     // getUserDetails();
 
     const AddProfileData = async () => {
@@ -49,7 +51,7 @@ export default function Profile({ navigation }) {
       // tempDart.push({});
     };
     AddProfileData();
-  }, [uidid]);
+  }, [isFocused]);
 
   if (user != null) {
     name = user.displayName;
@@ -146,6 +148,19 @@ export default function Profile({ navigation }) {
       );
   };
 
+  const AddProfileData = async () => {
+    const userId = user.uid;
+    const user1 = await firestore().collection("users").doc(userId).get();
+    let tempDart = [];
+    tempDart = user1._data;
+    setName(tempDart.name);
+    setmobilenumber(tempDart.mobile);
+    setEmail(tempDart.email);
+    setuidid(tempDart.uid);
+    // console.log('222222' + tempDart.password);
+    // tempDart.push({});
+  };
+
   useEffect(() => {
     // getItem();
     console.log(user.phoneNumber);
@@ -184,6 +199,7 @@ export default function Profile({ navigation }) {
   return (
     <Container>
       {/* <StatusBar hidden /> */}
+      {/* {AddProfileData()} */}
       <StatusBar
         backgroundColor={"#FDF8F4"}
         barStyle={"dark-content"}
