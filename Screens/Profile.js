@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import {
   TouchableOpacity,
   Dimensions,
@@ -8,24 +8,24 @@ import {
   StyleSheet,
   View,
   Text,
-} from 'react-native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import {COLORS, icon} from '../Constant';
+} from "react-native";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
+import { COLORS, icon } from "../Constant";
 
-const screenHeight = Dimensions.get('window').height;
+const screenHeight = Dimensions.get("window").height;
 
-export default function Profile({navigation}) {
-  const [Name, setName] = useState('');
-  const [mobilenumber, setmobilenumber] = useState('');
-  const [profile, setprofile] = useState('false');
-  const [Email, setEmail] = useState('');
+export default function Profile({ navigation }) {
+  const [Name, setName] = useState("");
+  const [mobilenumber, setmobilenumber] = useState("");
+  const [profile, setprofile] = useState("false");
+  const [Email, setEmail] = useState("");
   const [imageuri, setimageuri] = useState(
-    require('../assets/ProfileImage.png'),
+    require("../assets/ProfileImage.png")
   );
 
-  const [uidid, setuidid] = useState('');
+  const [uidid, setuidid] = useState("");
 
   const user = auth().currentUser;
   var name, email, photoUrl, uid, emailVerified;
@@ -44,30 +44,30 @@ export default function Profile({navigation}) {
       // title: 'Select Avatar',
       // customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
       storageOptions: {
-        mediatype: 'photo',
-        path: 'images',
+        mediatype: "photo",
+        path: "images",
       },
       includeBasse64: true,
     };
 
-    launchCamera(options, response => {
-      console.log('Response = ', response);
+    launchCamera(options, (response) => {
+      console.log("Response = ", response);
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        console.log("User cancelled image picker");
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        console.log("ImagePicker Error: ", response.error);
       } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
+        console.log("User tapped custom button: ", response.customButton);
       } else {
-        const source = {uri: response.assets[0].uri};
+        const source = { uri: response.assets[0].uri };
 
         // You can also display the image using data:
         // const source = {uri: 'data:image/jpeg;base64,' + response.data};
         setimageuri(source);
         // setimageuri(require('../assets/ProfileImage.png'));
 
-        console.log('Tag:' + source);
-        setprofile('false');
+        console.log("Tag:" + source);
+        setprofile("false");
 
         // this.setState({
         //   avatarSource: source,
@@ -80,29 +80,29 @@ export default function Profile({navigation}) {
       // title: 'Select Avatar',
       // customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
       storageOptions: {
-        mediatype: 'photo',
-        path: 'images',
+        mediatype: "photo",
+        path: "images",
       },
       includeBasse64: true,
     };
 
-    launchImageLibrary(options, response => {
-      console.log('Response = ', response);
+    launchImageLibrary(options, (response) => {
+      console.log("Response = ", response);
 
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        console.log("User cancelled image picker");
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        console.log("ImagePicker Error: ", response.error);
       } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
+        console.log("User tapped custom button: ", response.customButton);
       } else {
-        const source = {uri: response.assets[0].uri};
+        const source = { uri: response.assets[0].uri };
 
         // You can also display the image using data:
         // const source = {uri: 'data:image/jpeg;base64,' + response.data};
         setimageuri(source);
-        console.log('Tag:' + source);
-        setprofile('false');
+        console.log("Tag:" + source);
+        setprofile("false");
 
         // this.setState({
         //   avatarSource: source,
@@ -116,12 +116,12 @@ export default function Profile({navigation}) {
       .signOut()
       .then(
         function () {
-          console.log('Signed Out');
-          navigation.navigate('login');
+          console.log("Signed Out");
+          navigation.navigate("login");
         },
         function (error) {
-          console.error('Sign Out Error', error);
-        },
+          console.error("Sign Out Error", error);
+        }
       );
   };
 
@@ -140,7 +140,7 @@ export default function Profile({navigation}) {
 
     const AddProfileData = async () => {
       const userId = user.uid;
-      const user1 = await firestore().collection('users').doc(userId).get();
+      const user1 = await firestore().collection("users").doc(userId).get();
       let tempDart = [];
       tempDart = user1._data;
       setName(tempDart.name);
@@ -171,54 +171,57 @@ export default function Profile({navigation}) {
     <Container>
       {/* <StatusBar hidden /> */}
       <StatusBar
-        backgroundColor={'#FDF8F4'}
-        barStyle={'dark-content'}
-        showHideTransition={'fade'}
+        backgroundColor={"#FDF8F4"}
+        barStyle={"dark-content"}
+        showHideTransition={"fade"}
       />
 
       <ScrollView vertical={true} showsVerticalScrollIndicator={false}>
         <AccountTopContainer>
-          <Image source={require('../assets/AccountBackround.png')} />
+          <Image source={require("../assets/AccountBackround.png")} />
         </AccountTopContainer>
         <TouchableOpacity
-          style={{position: 'absolute'}}
-          onPress={() => navigation.navigate('Home1')}>
+          style={{ position: "absolute" }}
+          onPress={() => navigation.navigate("Home1")}
+        >
           <SearchIcon>
-            <Image source={icon.BackBotton} style={{height: 26, width: 26}} />
+            <Image source={icon.BackBotton} style={{ height: 26, width: 26 }} />
           </SearchIcon>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('AddProfile', {
+            navigation.navigate("AddProfile", {
               // uid: Name.uid,
               uid: uidid,
             });
           }}
-          style={{position: 'absolute', marginTop: 40, right: 29}}>
-          <Image source={icon.Edit} style={{width: 20, height: 20}} />
+          style={{ position: "absolute", marginTop: 40, right: 29 }}
+        >
+          <Image source={icon.Edit} style={{ width: 20, height: 20 }} />
         </TouchableOpacity>
 
         <ProfileI>
           <TouchableOpacity
             onPress={() => {
-              setprofile('true');
-            }}>
+              setprofile("true");
+            }}
+          >
             <ProfileIcon>
               <ImageP source={imageuri} />
             </ProfileIcon>
           </TouchableOpacity>
-          <NameText>{Email == '' ? 'Gust' : Name}</NameText>
+          <NameText>{Email == "" ? "Gust" : Name}</NameText>
           <MobileNumber style={styles.MobilenumberText}>
-            {Email == ''
-              ? 'Enter Your Mobile Number'
+            {Email == ""
+              ? "Enter Your Mobile Number"
               : // '+91' +
                 mobilenumber}
           </MobileNumber>
         </ProfileI>
         <ProfileContainer>
           <TouchableOpacity
-            onPress={() => navigation.navigate('MyOrderTab')}
+            onPress={() => navigation.navigate("MyOrderTab")}
             // onPress={() => {
             //   this.props.navigation.push('Product', {
             //     product: data,
@@ -239,7 +242,7 @@ export default function Profile({navigation}) {
             </ContainerIcon>
             <ContainerText>Notifications</ContainerText>
           </Container2>
-          <TouchableOpacity onPress={() => navigation.navigate('Refer')}>
+          <TouchableOpacity onPress={() => navigation.navigate("Refer")}>
             <Container2>
               <ContainerIcon>
                 <ImageContainer source={icon.refer} />
@@ -247,7 +250,7 @@ export default function Profile({navigation}) {
               <ContainerText>Refer</ContainerText>
             </Container2>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Wishlist')}>
+          <TouchableOpacity onPress={() => navigation.navigate("Wishlist")}>
             <Container2>
               <ContainerIcon>
                 <ImageContainer source={icon.Connect} />
@@ -273,30 +276,33 @@ export default function Profile({navigation}) {
 
       <TouchableOpacity
         onPress={() => {
-          setprofile('false');
+          setprofile("false");
         }}
         style={[
           styles.blackContainer,
-          profile == 'true' && styles.blackContainer1,
+          profile == "true" && styles.blackContainer1,
         ]}
       />
       {/* <View style={{justifyContent: 'center', alignItems: 'center'}}> */}
       <View
         style={[
           styles.whiteContainer,
-          profile == 'true' && styles.whiteContainer1,
-        ]}>
+          profile == "true" && styles.whiteContainer1,
+        ]}
+      >
         <TouchableOpacity
           onPress={() => {
             opencamara();
-          }}>
+          }}
+        >
           <Text style={styles.sortContentText}>Open a Camera</Text>
         </TouchableOpacity>
         <View style={styles.Divider} />
         <TouchableOpacity
           onPress={() => {
             openGallary();
-          }}>
+          }}
+        >
           <Text style={styles.sortContentText}>Open a Gallary</Text>
         </TouchableOpacity>
       </View>
@@ -447,50 +453,50 @@ const MobileNumber = styled.Text`
 const styles = StyleSheet.create({
   MobilenumberText: {
     fontSize: 16,
-    fontWeight: '500',
-    color: '#332F2E',
+    fontWeight: "500",
+    color: "#332F2E",
   },
   blackContainer: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'black',
-    position: 'absolute',
+    width: "100%",
+    height: "100%",
+    backgroundColor: "black",
+    position: "absolute",
     opacity: 0.4,
     marginTop: screenHeight - 10,
     // 0,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   blackContainer1: {
     marginTop: 0,
   },
   whiteContainer: {
-    width: '70.41%',
+    width: "70.41%",
     height: 50,
-    backgroundColor: '#ffffff',
-    position: 'absolute',
-    alignSelf: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#ffffff",
+    position: "absolute",
+    alignSelf: "center",
+    justifyContent: "center",
     marginTop: screenHeight - 10,
     borderRadius: 12,
     // justifyContent: 'center',
   },
   whiteContainer1: {
-    marginTop: '80%',
+    marginTop: "80%",
   },
   sortContentText: {
     fontSize: 16,
-    fontWeight: '400',
-    color: '#332F2E',
-    alignSelf: 'center',
+    fontWeight: "400",
+    color: "#332F2E",
+    alignSelf: "center",
     paddingVertical: 20,
     // backgroundColor: '#f2f2f2',
   },
   Divider: {
-    backgroundColor: '#332F2E42',
-    width: '80%',
+    backgroundColor: "#332F2E42",
+    width: "80%",
     height: 1,
     opacity: 0.26,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
 });
