@@ -161,4 +161,8 @@ vendor/
 # CircleCI
 .circleci/generated_config.yml
 .circleci/storage
+
+
 yarn.lock
+android/app/build
+android/app/.DS_Store
