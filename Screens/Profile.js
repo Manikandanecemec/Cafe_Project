@@ -30,6 +30,27 @@ export default function Profile({ navigation }) {
   const user = auth().currentUser;
   var name, email, photoUrl, uid, emailVerified;
 
+  useEffect(() => {
+    // getItem();
+    console.log(user.phoneNumber);
+    console.log("data");
+    // getUserDetails();
+
+    const AddProfileData = async () => {
+      const userId = user.uid;
+      const user1 = await firestore().collection("users").doc(userId).get();
+      let tempDart = [];
+      tempDart = user1._data;
+      setName(tempDart.name);
+      setmobilenumber(tempDart.mobile);
+      setEmail(tempDart.email);
+      setuidid(tempDart.uid);
+      // console.log('222222' + tempDart.password);
+      // tempDart.push({});
+    };
+    AddProfileData();
+  }, [uidid]);
+
   if (user != null) {
     name = user.displayName;
     email = user.email;
@@ -125,17 +146,10 @@ export default function Profile({ navigation }) {
       );
   };
 
-  // const getUserDetails = () => {
-  //   if (user != null) {
-  //     setmobilenumber(user.phoneNumber);
-  //   } else {
-  //     setmobilenumber('Phone Number');
-  //   }
-  // };
-
   useEffect(() => {
     // getItem();
     console.log(user.phoneNumber);
+    console.log("data");
     // getUserDetails();
 
     const AddProfileData = async () => {
