@@ -163,6 +163,8 @@ vendor/
 .circleci/storage
 
 
+
+# mine added files
 yarn.lock
 android/app/build
 android/app/.DS_Store
