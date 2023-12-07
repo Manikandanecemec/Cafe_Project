@@ -10,18 +10,18 @@ import {
   StatusBar,
   Dimensions,
   TextInput,
-} from 'react-native';
+} from "react-native";
 // const SearchRef = useRef();
-import {ColorTheme, icon} from '../Constant';
-import styled from 'styled-components';
-import {connect} from 'react-redux';
-import React, {useState} from 'react';
-import Lottie from 'lottie-react-native';
-import DatePicker from 'react-native-date-picker';
-import {useEffect} from 'react';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import {useIsFocused} from '@react-navigation/native';
+import { ColorTheme, icon } from "../Constant";
+import styled from "styled-components";
+import { connect } from "react-redux";
+import React, { useState } from "react";
+import Lottie from "lottie-react-native";
+import DatePicker from "react-native-date-picker";
+import { useEffect } from "react";
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
+import { useIsFocused } from "@react-navigation/native";
 
 // function mapStateToProps(state) {
 //   return {cartItems: state};
@@ -42,23 +42,24 @@ import {useIsFocused} from '@react-navigation/native';
 //   };
 // }
 
-const Height = Dimensions.get('window').height;
+const Height = Dimensions.get("window").height;
 
 function renderProduct() {
   return (
-    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{ justifyContent: "center", alignItems: "center" }}>
       <View style={styles.cuponContainer}>
         <Image
           source={icon.AppliedCoupon}
-          style={{width: 27, height: 27, marginTop: 20, marginLeft: 26}}
+          style={{ width: 27, height: 27, marginTop: 20, marginLeft: 26 }}
         />
         <Text style={styles.CouponName}>CAFE50</Text>
         <Text style={styles.CouponSub}>Coupon applied on the bill</Text>
         <TouchableOpacity
-          style={{marginTop: 28.65, right: 26.15, position: 'absolute'}}
+          style={{ marginTop: 28.65, right: 26.15, position: "absolute" }}
           onPress={() => {
-            setCoupon('false');
-          }}>
+            setCoupon("false");
+          }}
+        >
           <Image
             source={icon.close}
             style={{
@@ -72,7 +73,7 @@ function renderProduct() {
   );
 }
 
-const renderDelivery = ({item, index}) => {
+const renderDelivery = ({ item, index }) => {
   return (
     <TouchableOpacity
       key={index}
@@ -81,20 +82,23 @@ const renderDelivery = ({item, index}) => {
         setscheduleOrder(item.type);
         // this.setState({status: item.type}),
         //   this.setState({scheduleOrder: item.type});
-      }}>
-      <View style={{justifyContent: 'center', marginTop: 7}}>
+      }}
+    >
+      <View style={{ justifyContent: "center", marginTop: 7 }}>
         <View
           style={{
-            flexDirection: 'row',
-          }}>
+            flexDirection: "row",
+          }}
+        >
           <Image
             source={item.icon}
-            style={{width: 27, height: 27, marginTop: 13, marginLeft: 26}}
+            style={{ width: 27, height: 27, marginTop: 13, marginLeft: 26 }}
           />
           <Text style={styles.DeliveryText}>{item.type}</Text>
           <Text style={styles.DeliveryTextSub}>{item.dis}</Text>
           <TouchableOpacity
-            style={{marginTop: 18, right: 26.15, position: 'absolute'}}>
+            style={{ marginTop: 18, right: 26.15, position: "absolute" }}
+          >
             {status == item.type ? (
               <Image
                 source={icon.SelectedDelivery}
@@ -119,14 +123,14 @@ const renderDelivery = ({item, index}) => {
   );
 };
 
-const renderItem = ({item, index}) => {
+const renderItem = ({ item, index }) => {
   return (
-    <TouchableOpacity key={index} style={{marginTop: 16}}>
-      <BigContainer style={{flex: 1, backgroundColor: ColorTheme.white}}>
+    <TouchableOpacity key={index} style={{ marginTop: 16 }}>
+      <BigContainer style={{ flex: 1, backgroundColor: ColorTheme.white }}>
         <Container>
           <ProductContainer>
             <Image
-              style={{width: '100%', height: '100%'}}
+              style={{ width: "100%", height: "100%" }}
               source={item.url}
               // {icon.Filtercoffee}
             />
@@ -138,19 +142,19 @@ const renderItem = ({item, index}) => {
           <StarContainerall>
             <Cont>
               <StarContainer>
-                <StarImage source={require('../assets/star.png')} />
+                <StarImage source={require("../assets/star.png")} />
               </StarContainer>
               <StarContainer>
-                <StarImage source={require('../assets/star.png')} />
+                <StarImage source={require("../assets/star.png")} />
               </StarContainer>
               <StarContainer>
-                <StarImage source={require('../assets/star.png')} />
+                <StarImage source={require("../assets/star.png")} />
               </StarContainer>
               <StarContainer>
-                <StarImage source={require('../assets/stargray.png')} />
+                <StarImage source={require("../assets/stargray.png")} />
               </StarContainer>
               <StarContainer>
-                <StarImage source={require('../assets/stargray.png')} />
+                <StarImage source={require("../assets/stargray.png")} />
               </StarContainer>
             </Cont>
             <RatingText>
@@ -166,7 +170,7 @@ const renderItem = ({item, index}) => {
           <CartaddContainer>
             <TouchableOpacity onPress={() => this.props.removeItem(item)}>
               <AddContainer>
-                <Image source={icon.Minus} style={{height: 15, width: 15}} />
+                <Image source={icon.Minus} style={{ height: 15, width: 15 }} />
               </AddContainer>
             </TouchableOpacity>
 
@@ -176,14 +180,20 @@ const renderItem = ({item, index}) => {
 
             <TouchableOpacity onPress={() => this.props.addItemToCart(item)}>
               <SubContainer>
-                <Image source={icon.Addition} style={{height: 15, width: 15}} />
+                <Image
+                  source={icon.Addition}
+                  style={{ height: 15, width: 15 }}
+                />
               </SubContainer>
             </TouchableOpacity>
           </CartaddContainer>
 
           <PercentageContainer>
             <PerIconC>
-              <Image source={icon.Coupon} style={{height: 9.25, width: 9.25}} />
+              <Image
+                source={icon.Coupon}
+                style={{ height: 9.25, width: 9.25 }}
+              />
             </PerIconC>
             <PerTextC>
               <PercentageText>{item.discount}</PercentageText>
@@ -196,21 +206,22 @@ const renderItem = ({item, index}) => {
   );
 };
 
-const Cart = ({navigation}) => {
+const Cart = ({ navigation }) => {
   const [ModalVisible, setModalVisible] = useState();
   const [cartItems, setcartItems] = useState(1);
   // const [mode, setmode] = useState('UPI');
-  const [status, setstatus] = useState('Delivery Now');
-  const [scheduleOrder, setscheduleOrder] = useState('Delivery Now');
+  const [status, setstatus] = useState("Delivery Now");
+  const [scheduleOrder, setscheduleOrder] = useState("Delivery Now");
   const [chosenDate, setchosenDate] = useState(new Date());
-  const [scheduleDeliveryType, setscheduleDeliveryType] = useState('');
+  const [scheduleDeliveryType, setscheduleDeliveryType] = useState("");
   const [CartList, setCartList] = useState([]);
   const isFocused = useIsFocused();
   const [addresslist, setaddresslist] = useState([]);
   const [CartTotal, setcartTotal] = useState();
   const [loading, setLoading] = useState(false);
-  const [condition, setcondition] = useState('false');
-  const [Coupon, setCoupon] = useState('true');
+  const [condition, setcondition] = useState("false");
+  const [Coupon, setCoupon] = useState("true");
+  const [CouponText, setCouponText] = useState("");
 
   const usergetdata = auth().currentUser;
 
@@ -226,26 +237,27 @@ const Cart = ({navigation}) => {
   const addresslistS = async () => {
     const userId = usergetdata.uid;
     let tempDart = [];
-    firestore().collection('users').doc(userId).update({
+    firestore().collection("users").doc(userId).update({
       address: tempDart,
     });
   };
 
   function renderProduct() {
     return (
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
         <View style={styles.cuponContainer}>
           <Image
             source={icon.AppliedCoupon}
-            style={{width: 27, height: 27, marginTop: 20, marginLeft: 26}}
+            style={{ width: 27, height: 27, marginTop: 20, marginLeft: 26 }}
           />
           <Text style={styles.CouponName}>CAFE50</Text>
           <Text style={styles.CouponSub}>Coupon applied on the bill</Text>
           <TouchableOpacity
-            style={{marginTop: 28.65, right: 26.15, position: 'absolute'}}
+            style={{ marginTop: 28.65, right: 26.15, position: "absolute" }}
             onPress={() => {
-              setCoupon('false');
-            }}>
+              setCoupon("false");
+            }}
+          >
             <Image
               source={icon.close}
               style={{
@@ -259,10 +271,64 @@ const Cart = ({navigation}) => {
     );
   }
 
+  function Applycoupon() {
+    return (
+      <View style={{ flexDirection: "column", width: "100%" }}>
+        <View style={styles.cmtContainer}>
+          <TextInput
+            onChangeText={(txt) => setCouponText(txt)}
+            // ref={SearchRef}
+            placeholder="Enter the valid coupon code"
+            keyboardType="default"
+            style={{
+              padding: 10,
+              color: "#332F2E",
+
+              width: 180,
+              fontSize: 13,
+              // alignSelf: 'center',
+            }}
+          ></TextInput>
+          <TouchableOpacity
+            style={{ position: "absolute" }}
+            // onPress={() => setCouponText()}
+          >
+            <View
+              style={{
+                width: 120,
+                height: 36,
+
+                // borderColor: "black",
+                borderRadius: 8,
+                borderTopStartRadius: 0,
+                borderBottomStartRadius: 0,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "black",
+                // alignSelf: "center",
+                // marginRight: 10,
+                marginLeft: 175,
+              }}
+            >
+              <Text style={{ color: "white" }}>Apply</Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* <Text style={styles.cmtText}>
+                Write instructions for smoother delivery
+              </Text> */}
+          {/* <TouchableOpacity style={{ position: "absolute", right: 29 }}>
+          <Image source={icon.Edit} style={{ width: 12, height: 12 }} />
+        </TouchableOpacity> */}
+        </View>
+      </View>
+    );
+  }
+
   const getCartItems = async () => {
     setLoading(true);
     const userId = usergetdata.uid;
-    const user = await firestore().collection('users').doc(userId).get();
+    const user = await firestore().collection("users").doc(userId).get();
     setCartList(user._data.cart);
 
     const TotalCartvalue = getTotal();
@@ -272,7 +338,7 @@ const Cart = ({navigation}) => {
 
   const getTotal = () => {
     let total = 0;
-    CartList.map(item => {
+    CartList.map((item) => {
       total = total + item.qty * item.price;
     });
     return total;
@@ -295,9 +361,9 @@ const Cart = ({navigation}) => {
           style={{
             width: 311,
             height: 1,
-            backgroundColor: '#ebe8e4',
-            position: 'absolute',
-            alignSelf: 'center',
+            backgroundColor: "#ebe8e4",
+            position: "absolute",
+            alignSelf: "center",
             marginTop: 78,
           }}
         />
@@ -310,9 +376,9 @@ const Cart = ({navigation}) => {
           style={{
             width: 311,
             height: 1,
-            backgroundColor: '#ebe8e4',
-            position: 'absolute',
-            alignSelf: 'center',
+            backgroundColor: "#ebe8e4",
+            position: "absolute",
+            alignSelf: "center",
             marginTop: 154,
           }}
         />
@@ -322,35 +388,35 @@ const Cart = ({navigation}) => {
     );
   }
 
-  const deleteitermfromCart = async index => {
-    console.log('the deleteitermfromCart');
+  const deleteitermfromCart = async (index) => {
+    console.log("the deleteitermfromCart");
     const userId = usergetdata.uid;
-    const user = await firestore().collection('users').doc(userId).get();
+    const user = await firestore().collection("users").doc(userId).get();
     let tempDart = [];
     tempDart = user._data.cart;
     tempDart.splice(index, 1);
-    firestore().collection('users').doc(userId).update({
+    firestore().collection("users").doc(userId).update({
       cart: tempDart,
     });
     setCartList(user._data.cart);
     // getCartItems();
   };
 
-  const RemoveitemfromCart = async item => {
-    console.log('the RemoveitemfromCart');
+  const RemoveitemfromCart = async (item) => {
+    console.log("the RemoveitemfromCart");
     const userId = usergetdata.uid;
     // console.log(item);
-    const user = await firestore().collection('users').doc(userId).get();
+    const user = await firestore().collection("users").doc(userId).get();
     let tempDart = [];
     console.log(tempDart);
     tempDart = user._data.cart;
     if (tempDart.length > 0) {
-      tempDart.map(itm => {
+      tempDart.map((itm) => {
         if (itm.id == item.id) {
           itm.qty = itm.qty - 1;
-          console.log('Remove from cart');
+          console.log("Remove from cart");
         }
-        firestore().collection('users').doc(userId).update({
+        firestore().collection("users").doc(userId).update({
           cart: tempDart,
         });
       });
@@ -359,17 +425,17 @@ const Cart = ({navigation}) => {
     // getCartItems();
   };
 
-  const addItemToCart = async item => {
+  const addItemToCart = async (item) => {
     const userId = usergetdata.uid;
-    const user = await firestore().collection('users').doc(userId).get();
+    const user = await firestore().collection("users").doc(userId).get();
     let tempDart = [];
     tempDart = user._data.cart;
-    tempDart.map(itm => {
+    tempDart.map((itm) => {
       if (itm.id == item.id) {
         itm.qty = itm.qty + 1;
       }
     });
-    firestore().collection('users').doc(userId).update({
+    firestore().collection("users").doc(userId).update({
       cart: tempDart,
     });
     setCartList(user._data.cart);
@@ -378,21 +444,21 @@ const Cart = ({navigation}) => {
 
   const addCartTotalValue = async () => {
     const userId = usergetdata.uid;
-    const user = await firestore().collection('users').doc(userId).get();
+    const user = await firestore().collection("users").doc(userId).get();
     let tempDart = [];
     tempDart = user._data.cart;
 
-    tempDart.push({CartTotal});
+    tempDart.push({ CartTotal });
     firestore()
-      .collection('users')
+      .collection("users")
       .doc(userId)
       .update({
         cart: tempDart,
       })
-      .then(res => {
-        console.log('successfully added');
+      .then((res) => {
+        console.log("successfully added");
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -401,17 +467,17 @@ const Cart = ({navigation}) => {
     setModalVisible(true);
     const userId = usergetdata.uid;
     firestore()
-      .collection('users')
+      .collection("users")
       .doc(userId)
       .set({
         userId: userId,
         cart: [],
       })
-      .then(res => {
+      .then((res) => {
         setModalVisible(false);
         // navigation.goBack();
       })
-      .catch(error => {
+      .catch((error) => {
         setModalVisible(false);
         console.log(error);
       });
@@ -422,19 +488,20 @@ const Cart = ({navigation}) => {
       <View
         style={{
           flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'white',
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "white",
           // alignSelf: 'center',
           // alignContent: 'center',
-        }}>
+        }}
+      >
         <Lottie
-          source={require('../assets/97930-loading')}
+          source={require("../assets/97930-loading")}
           autoPlay={true}
           loop={true}
           duration={0}
           // loop={false}
-          style={{width: 100, height: 100}}
+          style={{ width: 100, height: 100 }}
         />
       </View>
       // <Text>Data is loading...</Text>
@@ -444,20 +511,21 @@ const Cart = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
-        backgroundColor={'white'}
-        barStyle={'dark-content'}
-        showHideTransition={'fade'}
+        backgroundColor={"white"}
+        barStyle={"dark-content"}
+        showHideTransition={"fade"}
       />
 
       {CartList.length > 0 ? (
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{flexDirection: 'column'}}>
+          <View style={{ flexDirection: "column" }}>
             <TouchableOpacity
               style={styles.BackContainer}
-              onPress={() => navigation.goBack()}>
+              onPress={() => navigation.goBack()}
+            >
               <Image
                 source={icon.BackBotton}
-                style={{height: 25, width: 25, marginLeft: 25}}
+                style={{ height: 25, width: 25, marginLeft: 25 }}
               />
             </TouchableOpacity>
             <Text style={styles.TitleText}>Your Order</Text>
@@ -465,24 +533,25 @@ const Cart = ({navigation}) => {
           <View style={styles.ImageContainer}>
             <Image
               source={icon.CartOrderSlider}
-              style={{height: 46, width: 317}}
+              style={{ height: 46, width: 317 }}
             />
           </View>
-          <View style={{marginTop: 20, backgroundColor: 'black'}} />
+          <View style={{ marginTop: 20, backgroundColor: "black" }} />
           {CartList.map((item, index) => (
             <TouchableOpacity
               key={index}
               onPress={() => {
-                navigation.navigate('ProductTab2', {
+                navigation.navigate("ProductTab2", {
                   product: item,
                   datas: item,
                 });
-              }}>
-              <BigContainer style={{flex: 1, backgroundColor: 'white'}}>
+              }}
+            >
+              <BigContainer style={{ flex: 1, backgroundColor: "white" }}>
                 <Container>
                   <ProductContainer>
                     <Image
-                      style={{width: '100%', height: '100%'}}
+                      style={{ width: "100%", height: "100%" }}
                       source={{
                         // {this.props.url}
                         uri: item.url,
@@ -496,19 +565,19 @@ const Cart = ({navigation}) => {
                   <StarContainerall>
                     <Cont>
                       <StarContainer>
-                        <StarImage source={require('../assets/star.png')} />
+                        <StarImage source={require("../assets/star.png")} />
                       </StarContainer>
                       <StarContainer>
-                        <StarImage source={require('../assets/star.png')} />
+                        <StarImage source={require("../assets/star.png")} />
                       </StarContainer>
                       <StarContainer>
-                        <StarImage source={require('../assets/star.png')} />
+                        <StarImage source={require("../assets/star.png")} />
                       </StarContainer>
                       <StarContainer>
-                        <StarImage source={require('../assets/stargray.png')} />
+                        <StarImage source={require("../assets/stargray.png")} />
                       </StarContainer>
                       <StarContainer>
-                        <StarImage source={require('../assets/stargray.png')} />
+                        <StarImage source={require("../assets/stargray.png")} />
                       </StarContainer>
                     </Cont>
                     <RatingText>
@@ -523,7 +592,7 @@ const Cart = ({navigation}) => {
                     {/* {this.props.price} */}₹{item.price}
                   </PriceText>
 
-                  <View style={{position: 'absolute'}}>
+                  <View style={{ position: "absolute" }}>
                     <CartaddContainer>
                       <TouchableOpacity
                         onPress={() => {
@@ -533,11 +602,12 @@ const Cart = ({navigation}) => {
                             deleteitermfromCart(index);
                           }
                           // setcondition('false');
-                        }}>
+                        }}
+                      >
                         <AddContainer>
                           <Image
                             source={icon.Minus}
-                            style={{height: 15, width: 15}}
+                            style={{ height: 15, width: 15 }}
                           />
                         </AddContainer>
                       </TouchableOpacity>
@@ -550,11 +620,12 @@ const Cart = ({navigation}) => {
                         onPress={() => {
                           addItemToCart(item);
                           // setcondition('false');
-                        }}>
+                        }}
+                      >
                         <SubContainer>
                           <Image
                             source={icon.Addition}
-                            style={{height: 15, width: 15}}
+                            style={{ height: 15, width: 15 }}
                           />
                         </SubContainer>
                       </TouchableOpacity>
@@ -565,7 +636,7 @@ const Cart = ({navigation}) => {
                     <PerIconC>
                       <Image
                         source={icon.Coupon}
-                        style={{height: 9.25, width: 9.25}}
+                        style={{ height: 9.25, width: 9.25 }}
                       />
                     </PerIconC>
                     <PerTextC>
@@ -586,19 +657,20 @@ const Cart = ({navigation}) => {
               renderItem={renderItem}
               // numColumns={numColumns}
             /> */}
-          {Coupon == 'true' ? renderProduct() : <View />}
+          {Coupon == "false" ? renderProduct() : Applycoupon()}
 
-          {scheduleDeliveryType !== '' ? (
+          {scheduleDeliveryType !== "" ? (
             <View style={styles.scheduledOrderContainer}>
               <View
                 style={{
-                  flexDirection: 'row',
+                  flexDirection: "row",
                   right: 21,
                   marginTop: 16,
-                  position: 'absolute',
+                  position: "absolute",
                   // justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+                  alignItems: "center",
+                }}
+              >
                 <Text style={styles.scheduledOrderText}>Schedulede</Text>
                 <Image
                   source={icon.scheduledelivery}
@@ -617,24 +689,27 @@ const Cart = ({navigation}) => {
                 {/* {this.state.chosenDate?.getHours()/this.state.chosenDate?.getMinutes() } */}
               </Text>
               <View
-                style={{flexDirection: 'row', marginLeft: 25, marginTop: 19}}>
+                style={{ flexDirection: "row", marginLeft: 25, marginTop: 19 }}
+              >
                 <TouchableOpacity
                   style={styles.cancelButton3}
                   onPress={() => {
-                    setscheduleDeliveryType('');
-                    setstatus('Delivery Now');
+                    setscheduleDeliveryType("");
+                    setstatus("Delivery Now");
                     // setState({scheduleDeliveryType: ''}),
                     //   setState({status: 'Delivery Now'});
-                  }}>
+                  }}
+                >
                   <Text style={styles.buttonTex3}>Delivery Now</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.setButtonContainer}
                   onPress={() => {
-                    setscheduleDeliveryType('schedule your delivery');
+                    setscheduleDeliveryType("schedule your delivery");
 
                     // console.log(this.state.chosenDate);
-                  }}>
+                  }}
+                >
                   <Text style={styles.buttonText2}>Reschedule</Text>
                 </TouchableOpacity>
               </View>
@@ -650,12 +725,14 @@ const Cart = ({navigation}) => {
                     setstatus(item.type), setscheduleDeliveryType(item.type);
                     // this.setState({status: item.type}),
                     //   this.setState({scheduleDeliveryType: item.type});
-                  }}>
-                  <View style={{justifyContent: 'center', marginTop: 6}}>
+                  }}
+                >
+                  <View style={{ justifyContent: "center", marginTop: 6 }}>
                     <View
                       style={{
-                        flexDirection: 'row',
-                      }}>
+                        flexDirection: "row",
+                      }}
+                    >
                       <Image
                         source={item.icon}
                         style={{
@@ -672,8 +749,9 @@ const Cart = ({navigation}) => {
                         style={{
                           marginTop: 18,
                           right: 26.15,
-                          position: 'absolute',
-                        }}>
+                          position: "absolute",
+                        }}
+                      >
                         {status == item.type ? (
                           <Image
                             source={icon.SelectedDelivery}
@@ -701,22 +779,23 @@ const Cart = ({navigation}) => {
           {/* //////// */}
 
           {/* //////// */}
-          <View style={styles.cmtContainer}>
+          <View style={styles.cmtContainer2}>
             <TextInput
               // ref={SearchRef}
               placeholder="Write instructions for smoother delivery"
               keyboardType="default"
               style={{
                 padding: 10,
-                color: '#332F2E',
-                width: '86%',
+                color: "#332F2E",
+                width: "86%",
                 // alignSelf: 'center',
-              }}></TextInput>
+              }}
+            ></TextInput>
             {/* <Text style={styles.cmtText}>
                 Write instructions for smoother delivery
               </Text> */}
-            <TouchableOpacity style={{position: 'absolute', right: 29}}>
-              <Image source={icon.Edit} style={{width: 12, height: 12}} />
+            <TouchableOpacity style={{ position: "absolute", right: 29 }}>
+              <Image source={icon.Edit} style={{ width: 12, height: 12 }} />
             </TouchableOpacity>
           </View>
           {PriceTag()}
@@ -724,26 +803,28 @@ const Cart = ({navigation}) => {
             style={styles.bottomCon}
             onPress={() => {
               // addCartTotalValue();
-              navigation.push('AddressPage');
-            }}>
-            <Text style={{fontSize: 15, fontWeight: '700', color: '#ffffff'}}>
+              navigation.push("AddressPage");
+            }}
+          >
+            <Text style={{ fontSize: 15, fontWeight: "700", color: "#ffffff" }}>
               Confirm Order
             </Text>
           </TouchableOpacity>
         </ScrollView>
       ) : (
-        <View style={{flex: 1, backgroundColor: 'white'}}>
-          <View style={{flexDirection: 'column'}}>
+        <View style={{ flex: 1, backgroundColor: "white" }}>
+          <View style={{ flexDirection: "column" }}>
             <TouchableOpacity
               style={styles.BackContainer}
-              onPress={() => navigation.goBack()}>
+              onPress={() => navigation.goBack()}
+            >
               <Image
                 source={icon.BackBotton}
-                style={{height: 25, width: 25, marginLeft: 25}}
+                style={{ height: 25, width: 25, marginLeft: 25 }}
               />
             </TouchableOpacity>
             <Lottie
-              source={require('../assets/108106-empty-cart.json')}
+              source={require("../assets/108106-empty-cart.json")}
               autoPlay={true}
               loop={false}
               duration={3500}
@@ -751,7 +832,7 @@ const Cart = ({navigation}) => {
                 width: 300,
                 height: 300,
                 marginTop: 70,
-                alignSelf: 'center',
+                alignSelf: "center",
               }}
             />
             <Text style={styles.cartText}>Your cart is empty</Text>
@@ -761,8 +842,11 @@ const Cart = ({navigation}) => {
             </Text>
             <TouchableOpacity
               style={styles.ReturnContainer}
-              onPress={() => navigation.navigate('Home1')}>
-              <Text style={{fontSize: 15, fontWeight: '700', color: '#FFFFFF'}}>
+              onPress={() => navigation.navigate("Home1")}
+            >
+              <Text
+                style={{ fontSize: 15, fontWeight: "700", color: "#FFFFFF" }}
+              >
                 Back to Home
               </Text>
             </TouchableOpacity>
@@ -772,20 +856,21 @@ const Cart = ({navigation}) => {
       <TouchableOpacity
         style={[
           styles.blackContainer,
-          scheduleDeliveryType == 'schedule your delivery' &&
+          scheduleDeliveryType == "schedule your delivery" &&
             styles.blackContainer1,
         ]}
         onPress={() => {
-          setscheduleDeliveryType('Delivery Now');
+          setscheduleDeliveryType("Delivery Now");
           // this.setState({scheduleDeliveryType: 'Delivery Now'});
         }}
       />
       <View
         style={[
           styles.scheduleOrder,
-          scheduleDeliveryType == 'schedule your delivery' &&
+          scheduleDeliveryType == "schedule your delivery" &&
             styles.scheduleOrder1,
-        ]}>
+        ]}
+      >
         <View style={styles.dateContainer}>
           <Text style={styles.TextSchodule1}>Delivery Schodule On</Text>
           <Text style={styles.TextSchodule2}>
@@ -796,15 +881,16 @@ const Cart = ({navigation}) => {
         </View>
         <View
           style={{
-            width: '100%',
+            width: "100%",
             height: 32,
             // backgroundColor: 'black',
             marginTop: 30,
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Image source={icon.Schoudle} style={{width: 31, height: 31}} />
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Image source={icon.Schoudle} style={{ width: 31, height: 31 }} />
           <Text style={styles.TextSchodule3}>
             choose your prefered delivery timing
           </Text>
@@ -812,9 +898,9 @@ const Cart = ({navigation}) => {
         <View style={styles.calenderContainer}>
           <DatePicker
             mode="time"
-            style={{position: 'absolute', marginLeft: 25}}
+            style={{ position: "absolute", marginLeft: 25 }}
             date={chosenDate}
-            onDateChange={setDate => setchosenDate(setDate)}
+            onDateChange={(setDate) => setchosenDate(setDate)}
             is24Hour={false}
           />
         </View>
@@ -822,13 +908,14 @@ const Cart = ({navigation}) => {
         <View
           style={{
             height: 56,
-            width: '100%',
+            width: "100%",
             // backgroundColor: 'black',
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
             marginTop: 29,
-            flexDirection: 'row',
-          }}>
+            flexDirection: "row",
+          }}
+        >
           {/* onPress={() => {
             this.setState({status: item.type}),
               this.setState({scheduleOrder: item.type});
@@ -836,19 +923,21 @@ const Cart = ({navigation}) => {
           <TouchableOpacity
             style={styles.cancelButton}
             onPress={() => {
-              setstatus('Delivery Now');
-              setscheduleDeliveryType('Delivery Now');
+              setstatus("Delivery Now");
+              setscheduleDeliveryType("Delivery Now");
               // this.setState({scheduleDeliveryType: 'Delivery Now'});
-            }}>
+            }}
+          >
             <Text style={styles.buttonText}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.setButtonContainer}
             onPress={() => {
-              setscheduleDeliveryType('Delivery Now');
+              setscheduleDeliveryType("Delivery Now");
               // this.setState({scheduleDeliveryType: 'Delivery Now'});
               console.log(chosenDate);
-            }}>
+            }}
+          >
             <Text style={styles.buttonText2}>Set</Text>
           </TouchableOpacity>
         </View>
@@ -1476,274 +1565,291 @@ const styles = StyleSheet.create({
   payAmount: {
     marginTop: 164,
     fontSize: 13,
-    fontWeight: '500',
-    color: '#363032',
-    position: 'absolute',
+    fontWeight: "500",
+    color: "#363032",
+    position: "absolute",
     right: 16,
   },
   payText: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#363032',
+    fontWeight: "600",
+    color: "#363032",
     marginTop: 163,
     marginLeft: 16,
-    position: 'absolute',
+    position: "absolute",
   },
   TaxAmount: {
     marginTop: 128,
     fontSize: 13,
-    fontWeight: '500',
-    color: '#363032',
-    position: 'absolute',
+    fontWeight: "500",
+    color: "#363032",
+    position: "absolute",
     right: 16,
   },
   TaxesText: {
     fontSize: 16,
-    fontWeight: '400',
-    color: '#363032',
+    fontWeight: "400",
+    color: "#363032",
     marginTop: 126,
     marginLeft: 16,
-    position: 'absolute',
+    position: "absolute",
   },
   deliveryamount: {
     marginTop: 91,
     fontSize: 13,
-    fontWeight: '500',
-    color: '#363032',
-    position: 'absolute',
+    fontWeight: "500",
+    color: "#363032",
+    position: "absolute",
     right: 16,
   },
   disText: {
     fontSize: 10,
-    fontWeight: '500',
-    color: '#363032',
+    fontWeight: "500",
+    color: "#363032",
     marginTop: 107,
     marginLeft: 16,
     opacity: 0.4,
   },
   deliveryText: {
     fontSize: 16,
-    fontWeight: '400',
-    color: '#363032',
+    fontWeight: "400",
+    color: "#363032",
     marginTop: 89,
     marginLeft: 16,
-    position: 'absolute',
+    position: "absolute",
   },
   couponValue: {
     marginTop: 50,
     fontSize: 13,
-    fontWeight: '500',
-    color: '#363032',
-    position: 'absolute',
+    fontWeight: "500",
+    color: "#363032",
+    position: "absolute",
     right: 16,
   },
   CouponText: {
     fontSize: 16,
-    fontWeight: '400',
-    color: '#363032',
+    fontWeight: "400",
+    color: "#363032",
     marginTop: 49,
     marginLeft: 16,
-    position: 'absolute',
+    position: "absolute",
   },
   totalPrice: {
     marginTop: 27,
     fontSize: 13,
-    fontWeight: '500',
-    color: '#363032',
-    position: 'absolute',
+    fontWeight: "500",
+    color: "#363032",
+    position: "absolute",
     right: 16,
   },
   priceContainer: {
-    width: '87.69%',
+    width: "87.69%",
     height: 210,
-    backgroundColor: '#FFFDF8',
-    alignSelf: 'center',
+    backgroundColor: "#FFFDF8",
+    alignSelf: "center",
     marginTop: 21,
     borderRadius: 15,
-    borderColor: '#FFE39d',
+    borderColor: "#FFE39d",
     borderWidth: 1,
   },
   totalText: {
     fontSize: 16,
-    fontWeight: '400',
-    color: '#363032',
+    fontWeight: "400",
+    color: "#363032",
     marginTop: 25,
     marginLeft: 16,
-    position: 'absolute',
+    position: "absolute",
   },
   container: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     flex: 1,
   },
   BackContainer: {
-    width: '100%',
+    width: "100%",
     height: 25,
-    justifyContent: 'center',
+    justifyContent: "center",
     marginTop: 32,
   },
   TitleText: {
     fontSize: 17,
-    fontWeight: '700',
-    color: '#332F2E',
+    fontWeight: "700",
+    color: "#332F2E",
     marginTop: 32,
-    alignSelf: 'center',
-    position: 'absolute',
+    alignSelf: "center",
+    position: "absolute",
   },
   ImageContainer: {
-    width: '100%',
+    width: "100%",
     height: 46,
     marginTop: 43,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   CouponName: {
     fontSize: 18,
-    fontWeight: '700',
-    color: '#E94B64',
+    fontWeight: "700",
+    color: "#E94B64",
     marginLeft: 16,
     marginTop: 16,
   },
   CouponSub: {
     fontSize: 12,
-    fontWeight: '400',
-    color: '#332F2E',
-    position: 'absolute',
+    fontWeight: "400",
+    color: "#332F2E",
+    position: "absolute",
     marginTop: 36,
     marginLeft: 68,
   },
   DeliveryText: {
     fontSize: 15,
-    fontWeight: '600',
-    color: '#E94B64',
+    fontWeight: "600",
+    color: "#E94B64",
     marginLeft: 68,
-    position: 'absolute',
+    position: "absolute",
     marginTop: 9,
+  },
+  cmtContainer2: {
+    width: "87.44%",
+    height: 36,
+    borderWidth: 1,
+    borderColor: "#99939229",
+    borderRadius: 8,
+    alignSelf: "center",
+    marginTop: 22,
+    justifyContent: "center",
   },
   DeliveryTextSub: {
     fontSize: 12,
-    fontWeight: '400',
-    color: '#332F2E',
-    position: 'absolute',
+    fontWeight: "400",
+    color: "#332F2E",
+    position: "absolute",
     marginTop: 28,
     marginLeft: 68,
     opacity: 0.7,
   },
   bottomCon: {
-    width: '89.74%',
+    width: "89.74%",
     height: 66,
-    backgroundColor: '#E94B64',
-    alignSelf: 'center',
+    backgroundColor: "#E94B64",
+    alignSelf: "center",
     borderRadius: 15,
     marginTop: 25,
     marginBottom: 21,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   cmtText: {
     fontSize: 14,
-    fontWeight: '400',
-    color: '#332F2E',
+    fontWeight: "400",
+    color: "#332F2E",
     opacity: 0.45,
     marginLeft: 13,
   },
   scheduledOrderContainer: {
-    width: '87.69%',
+    width: "87.69%",
     height: 169,
-    backgroundColor: '#f7f7f7',
-    alignSelf: 'center',
+    backgroundColor: "#f7f7f7",
+    alignSelf: "center",
     marginTop: 26,
     borderRadius: 15,
   },
   scheduledOrderText: {
     fontSize: 12,
-    fontWeight: '600',
-    color: '#332F2E',
+    fontWeight: "600",
+    color: "#332F2E",
     marginRight: 2,
   },
   TextName: {
     fontSize: 15,
-    fontWeight: '700',
-    color: '#E94B64',
+    fontWeight: "700",
+    color: "#E94B64",
     marginLeft: 24,
     marginTop: 39,
   },
   TextTiming: {
     fontSize: 10,
-    fontWeight: '400',
-    color: '#6E6B6A',
+    fontWeight: "400",
+    color: "#6E6B6A",
     marginTop: 2,
     marginLeft: 22,
   },
   cmtContainer: {
-    width: '87.44%',
+    width: "50%",
     height: 36,
     borderWidth: 1,
-    borderColor: '#99939229',
+    borderColor: "#99939229",
     borderRadius: 8,
-    alignSelf: 'center',
+    // alignSelf: "center",
     marginTop: 22,
-    justifyContent: 'center',
+    marginLeft: 30,
+    borderRadius: 8,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    // borderBottomLeftRadius: 0,
+    // borderTopStartRadius: 0,
+    // borderBottomStartRadius: 0,
+    // justifyContent: "center",
   },
   divContainer: {
-    width: '77.18%',
+    width: "77.18%",
     height: 1,
-    backgroundColor: '#000000',
+    backgroundColor: "#000000",
     opacity: 0.1,
-    alignSelf: 'center',
-    position: 'absolute',
+    alignSelf: "center",
+    position: "absolute",
     marginTop: 54,
   },
   deliveryContainer: {
-    width: '87.69%',
+    width: "87.69%",
     height: 106,
-    backgroundColor: '#F7F7F7',
-    alignSelf: 'center',
+    backgroundColor: "#F7F7F7",
+    alignSelf: "center",
     marginTop: 20,
     borderRadius: 15,
   },
   cuponContainer: {
-    width: '87.69%',
+    width: "87.69%",
     height: 66,
-    backgroundColor: '#F0FEE7',
+    backgroundColor: "#F0FEE7",
     borderRadius: 15,
     marginTop: 15,
     borderWidth: 1,
-    borderColor: '#A3CD5D85',
+    borderColor: "#A3CD5D85",
     // alignItems: 'center',
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   cartText: {
     fontSize: 20,
-    fontWeight: '700',
-    alignSelf: 'center',
+    fontWeight: "700",
+    alignSelf: "center",
     marginTop: 20,
-    color: 'black',
+    color: "black",
   },
   CartCaptionText: {
     fontSize: 15,
-    fontWeight: '400',
+    fontWeight: "400",
     width: 200,
-    textAlign: 'center',
-    color: 'gray',
+    textAlign: "center",
+    color: "gray",
     // justifyContent: 'center',
-    alignSelf: 'center',
+    alignSelf: "center",
     marginTop: 10,
   },
   ReturnContainer: {
-    width: '77.95%',
+    width: "77.95%",
     height: 66,
-    backgroundColor: '#E94B64',
+    backgroundColor: "#E94B64",
     borderRadius: 15,
-    alignSelf: 'center',
-    position: 'absolute',
+    alignSelf: "center",
+    position: "absolute",
     marginTop: Height - 150,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   scheduleOrderContainer: {
-    width: '100%',
+    width: "100%",
     height: 505,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderTopLeftRadius: 19,
     borderTopRightRadius: 19,
     marginTop: Height - 100,
@@ -1751,12 +1857,12 @@ const styles = StyleSheet.create({
     // backgroundColor: 'black',
   },
   blackContainer: {
-    backgroundColor: 'black',
+    backgroundColor: "black",
     opacity: 0.2,
     // flex: 1,
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
+    position: "absolute",
+    height: "100%",
+    width: "100%",
     marginTop: Height,
   },
   blackContainer1: {
@@ -1767,96 +1873,96 @@ const styles = StyleSheet.create({
   },
   scheduleOrder: {
     height: 505,
-    width: '100%',
-    position: 'absolute',
-    backgroundColor: 'white',
+    width: "100%",
+    position: "absolute",
+    backgroundColor: "white",
     marginTop: Height,
   },
   dateContainer: {
-    width: '87.69%',
+    width: "87.69%",
     height: 75,
-    backgroundColor: '#EDEDED',
+    backgroundColor: "#EDEDED",
     // backgroundColor: 'black',
-    alignSelf: 'center',
+    alignSelf: "center",
     marginTop: 32,
     borderRadius: 15,
-    alignItems: 'center',
+    alignItems: "center",
   },
   TextSchodule1: {
     fontSize: 15,
-    fontWeight: '600',
-    color: '#E94B64',
-    alignSelf: 'center',
+    fontWeight: "600",
+    color: "#E94B64",
+    alignSelf: "center",
     marginTop: 16,
   },
   TextSchodule2: {
     fontSize: 16,
-    fontWeight: '400',
-    color: '#332F2E',
+    fontWeight: "400",
+    color: "#332F2E",
     // alignSelf: 'center',
     // marginTop: 37,
   },
   TextSchodule3: {
     fontSize: 17,
-    fontWeight: '600',
-    color: '#332F2E',
+    fontWeight: "600",
+    color: "#332F2E",
     marginLeft: 8,
   },
   calenderContainer: {
-    width: '75.13%',
+    width: "75.13%",
     height: 198,
     borderWidth: 1,
-    borderColor: '#332F2E',
-    alignSelf: 'center',
-    justifyContent: 'center',
+    borderColor: "#332F2E",
+    alignSelf: "center",
+    justifyContent: "center",
     marginTop: 20,
     borderRadius: 8,
   },
   cancelButton: {
     height: 56,
-    width: '35.52%',
+    width: "35.52%",
     borderWidth: 1,
-    borderColor: '#4E4E4E',
+    borderColor: "#4E4E4E",
     borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   cancelButton3: {
     height: 56,
-    width: '35.52%',
+    width: "35.52%",
     borderWidth: 1,
-    borderColor: '#4E4E4E',
+    borderColor: "#4E4E4E",
     borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonText: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "500",
     // color: 'white',
-    color: 'black',
+    color: "black",
   },
   buttonTex3: {
     fontSize: 15,
-    fontWeight: '500',
+    fontWeight: "500",
     // color: 'white',
 
-    color: '#CDCDCD',
+    color: "#CDCDCD",
   },
   buttonText2: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "500",
     // color: 'white',
-    color: 'white',
+    color: "white",
   },
   setButtonContainer: {
     height: 56,
-    width: '35.52%',
-    backgroundColor: '#E94B64',
+    width: "35.52%",
+    backgroundColor: "#E94B64",
     marginLeft: 15,
     borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
@@ -2030,38 +2136,38 @@ const CustomText = styled.Text`
 const data = [
   {
     url: icon.Filtercoffee,
-    productName: 'Filter coffee',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25% OFF',
-    status: 'coffee',
+    productName: "Filter coffee",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25% OFF",
+    status: "coffee",
   },
   {
     url: icon.Espresso,
-    productName: 'Espresso',
-    RatingValue1: '30',
-    price: '₹120',
-    discount: '25% OFF',
+    productName: "Espresso",
+    RatingValue1: "30",
+    price: "₹120",
+    discount: "25% OFF",
   },
   {
     url: icon.cappuccino,
-    productName: 'cappuccino',
-    RatingValue1: '28',
-    price: '₹150',
-    discount: '25% OFF',
+    productName: "cappuccino",
+    RatingValue1: "28",
+    price: "₹150",
+    discount: "25% OFF",
   },
 ];
 
 const buttonData = [
   {
-    type: 'Delivery Now',
-    dis: 'Instant delivery',
+    type: "Delivery Now",
+    dis: "Instant delivery",
     icon: icon.DeliveryNow,
     selectedicon: icon.SelectedDelivery,
   },
   {
-    type: 'schedule your delivery',
-    dis: 'Choose desired time by delivery date',
+    type: "schedule your delivery",
+    dis: "Choose desired time by delivery date",
     icon: icon.scheduledelivery,
     selectedicon: icon.UnSelectedDelivery,
   },
