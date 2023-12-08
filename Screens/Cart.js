@@ -6,15 +6,13 @@ import {
   ScrollView,
   StyleSheet,
   SafeAreaView,
-  // FlatList,
   StatusBar,
   Dimensions,
   TextInput,
 } from "react-native";
-// const SearchRef = useRef();
+
 import { ColorTheme, icon } from "../Constant";
 import styled from "styled-components";
-import { connect } from "react-redux";
 import React, { useState } from "react";
 import Lottie from "lottie-react-native";
 import DatePicker from "react-native-date-picker";
@@ -22,26 +20,7 @@ import { useEffect } from "react";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import { useIsFocused } from "@react-navigation/native";
-
-// function mapStateToProps(state) {
-//   return {cartItems: state};
-// }
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     removeItem: item =>
-//       dispatch({
-//         type: 'REMOVE_TO_CART',
-//         payload: item,
-//       }),
-//     addItemToCart: item =>
-//       dispatch({
-//         type: 'ADD_TO_CART',
-//         payload: item,
-//       }),
-//   };
-// }
-
+import database from "@react-native-firebase/database";
 const Height = Dimensions.get("window").height;
 
 function renderProduct() {
@@ -222,8 +201,20 @@ const Cart = ({ navigation }) => {
   const [condition, setcondition] = useState("false");
   const [Coupon, setCoupon] = useState("true");
   const [CouponText, setCouponText] = useState("");
+  const [CouponData, setCouponData] = useState([]);
+  const [AppliedCouponData, SetAppliedCouponData] = useState([]);
+  const [AppliedCouponValue, SetAppliedCouponValue] = useState("");
 
   const usergetdata = auth().currentUser;
+
+  function onAuthStateChanged(user) {
+    if (user) {
+      //   // Some Android devices can automatically process the verification code (OTP) message, and the user would NOT need to enter the code.
+      //   // Actually, if he/she tries to enter it, he/she will get an error message because the code was already used in the background.
+      //   // In this function, make sure you hide the component(s) for entering the code and/or navigate away from this screen.
+      //   // It is also recommended to display a message to the user informing him/her that he/she has successfully logged in.
+    }
+  }
 
   useEffect(() => {
     if (usergetdata != null) {
@@ -232,13 +223,38 @@ const Cart = ({ navigation }) => {
     }
 
     // console.log(' cart screen Total:' + CartTotal);
+
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    // setLoading(true);
+    database()
+      .ref("/Coupon")
+      .once("value")
+      .then((snapshot) => {
+        const data = snapshot.val();
+        const newData = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
+        setCouponData(newData);
+        // console.log(data);
+      })
+      .finally(() => {
+        // setLoading(false);
+      });
+    return subscriber; // unsubscribe on unmount
   }, [isFocused]);
 
-  const addresslistS = async () => {
-    const userId = usergetdata.uid;
-    let tempDart = [];
-    firestore().collection("users").doc(userId).update({
-      address: tempDart,
+  const CouponCheck = (Text) => {
+    CouponData.map((itm) => {
+      if (itm.Code == Text) {
+        console.log("Coupocheck data" + itm);
+        SetAppliedCouponData(itm);
+        console.log("AppliedCouponValue" + itm.Price);
+        SetAppliedCouponValue(itm.Price);
+        setCoupon("false");
+      } else {
+        SetAppliedCouponValue("Invaliedcoupon");
+      }
     });
   };
 
@@ -250,7 +266,7 @@ const Cart = ({ navigation }) => {
             source={icon.AppliedCoupon}
             style={{ width: 27, height: 27, marginTop: 20, marginLeft: 26 }}
           />
-          <Text style={styles.CouponName}>CAFE50</Text>
+          <Text style={styles.CouponName}>{AppliedCouponData.Code}</Text>
           <Text style={styles.CouponSub}>Coupon applied on the bill</Text>
           <TouchableOpacity
             style={{ marginTop: 28.65, right: 26.15, position: "absolute" }}
@@ -273,7 +289,7 @@ const Cart = ({ navigation }) => {
 
   function Applycoupon() {
     return (
-      <View style={{ flexDirection: "column", width: "100%" }}>
+      <View style={{ width: "100%", height: 36 }}>
         <View style={styles.cmtContainer}>
           <TextInput
             onChangeText={(txt) => setCouponText(txt)}
@@ -283,20 +299,20 @@ const Cart = ({ navigation }) => {
             style={{
               padding: 10,
               color: "#332F2E",
-
               width: 180,
               fontSize: 13,
-              // alignSelf: 'center',
             }}
           ></TextInput>
           <TouchableOpacity
-            style={{ position: "absolute" }}
-            // onPress={() => setCouponText()}
+            // style={{ position: "absolute" }}
+            onPress={() => {
+              CouponCheck(CouponText);
+            }}
           >
             <View
               style={{
                 width: 120,
-                height: 36,
+                height: 38,
 
                 // borderColor: "black",
                 borderRadius: 8,
@@ -304,10 +320,10 @@ const Cart = ({ navigation }) => {
                 borderBottomStartRadius: 0,
                 justifyContent: "center",
                 alignItems: "center",
-                backgroundColor: "black",
+                backgroundColor: "#E94B64",
                 // alignSelf: "center",
                 // marginRight: 10,
-                marginLeft: 175,
+                // marginLeft: 175,
               }}
             >
               <Text style={{ color: "white" }}>Apply</Text>
@@ -321,6 +337,16 @@ const Cart = ({ navigation }) => {
           <Image source={icon.Edit} style={{ width: 12, height: 12 }} />
         </TouchableOpacity> */}
         </View>
+        {AppliedCouponValue == "Invaliedcoupon" ? (
+          <Text style={{ marginLeft: 40, color: "red" }}>*Invalied Coupon</Text>
+        ) : (
+          <View
+            style={{
+              // backgroundColor: "red",
+              height: 30,
+            }}
+          />
+        )}
       </View>
     );
   }
@@ -440,47 +466,6 @@ const Cart = ({ navigation }) => {
     });
     setCartList(user._data.cart);
     // getCartItems();
-  };
-
-  const addCartTotalValue = async () => {
-    const userId = usergetdata.uid;
-    const user = await firestore().collection("users").doc(userId).get();
-    let tempDart = [];
-    tempDart = user._data.cart;
-
-    tempDart.push({ CartTotal });
-    firestore()
-      .collection("users")
-      .doc(userId)
-      .update({
-        cart: tempDart,
-      })
-      .then((res) => {
-        console.log("successfully added");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const saveUser = () => {
-    setModalVisible(true);
-    const userId = usergetdata.uid;
-    firestore()
-      .collection("users")
-      .doc(userId)
-      .set({
-        userId: userId,
-        cart: [],
-      })
-      .then((res) => {
-        setModalVisible(false);
-        // navigation.goBack();
-      })
-      .catch((error) => {
-        setModalVisible(false);
-        console.log(error);
-      });
   };
 
   if (loading) {
@@ -658,6 +643,7 @@ const Cart = ({ navigation }) => {
               // numColumns={numColumns}
             /> */}
           {Coupon == "false" ? renderProduct() : Applycoupon()}
+          <View style={{ height: 15 }}></View>
 
           {scheduleDeliveryType !== "" ? (
             <View style={styles.scheduledOrderContainer}>
@@ -1750,7 +1736,7 @@ const styles = StyleSheet.create({
     height: 169,
     backgroundColor: "#f7f7f7",
     alignSelf: "center",
-    marginTop: 26,
+
     borderRadius: 15,
   },
   scheduledOrderText: {
@@ -1775,12 +1761,14 @@ const styles = StyleSheet.create({
   },
   cmtContainer: {
     width: "50%",
-    height: 36,
+    flexDirection: "row",
+    height: 40,
     borderWidth: 1,
     borderColor: "#99939229",
     borderRadius: 8,
+    // marginBottom: 10,
     // alignSelf: "center",
-    marginTop: 22,
+    // marginTop: 22,
     marginLeft: 30,
     borderRadius: 8,
     borderTopRightRadius: 0,
