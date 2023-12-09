@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -9,34 +9,34 @@ import {
   FlatList,
   StatusBar,
   PermissionsAndroid,
-} from 'react-native';
-import {icon} from '../Constant';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
-import RNFetchBlob from 'rn-fetch-blob';
-import {useIsFocused} from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import Share from 'react-native-share';
+} from "react-native";
+import { icon } from "../Constant";
+import RNHTMLtoPDF from "react-native-html-to-pdf";
+import RNFetchBlob from "rn-fetch-blob";
+import { useIsFocused } from "@react-navigation/native";
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
+import Share from "react-native-share";
 
-const MyOrderTab = ({navigation}) => {
-  const [status, setstatus] = useState('Delivered');
+const MyOrderTab = ({ navigation }) => {
+  const [status, setstatus] = useState("Delivered");
   const [orderData, setorderData] = useState([]);
-  const [ShippingPrice, setShippingPrice] = useState('₹00.00');
+  const [ShippingPrice, setShippingPrice] = useState("₹00.00");
   const [data, setdata] = useState([]);
   const [datlist, setDatalist] = useState([
-    ...data.filter(e => e.status == status),
+    ...data.filter((e) => e.status == status),
   ]);
-  const [fileName, setfilename] = useState('2222222');
+  const [fileName, setfilename] = useState("2222222");
   const isFocused = useIsFocused();
   const [oredrList, setOrderList] = useState([
-    ...data.filter(e => e.status == status),
+    ...data.filter((e) => e.status == status),
   ]);
   const usergetdata = auth().currentUser;
 
   useEffect(() => {
     const setstatusFilter = () => {
       // console.log('SCreenVal' + status);
-      setOrderList([...data.filter(e => e.status == status)]);
+      setOrderList([...data.filter((e) => e.status == status)]);
     };
     setstatusFilter(status);
   }, [data]);
@@ -46,7 +46,7 @@ const MyOrderTab = ({navigation}) => {
       const getOrderItems = async () => {
         // setLoading(true);
         const userId = usergetdata.uid;
-        const user = await firestore().collection('users').doc(userId).get();
+        const user = await firestore().collection("users").doc(userId).get();
         // setOrderList(user._data.orders);
         setdata(user._data.orders);
         console.log(oredrList);
@@ -59,12 +59,12 @@ const MyOrderTab = ({navigation}) => {
     // console.log(' cart screen Total:' + CartTotal);
   }, [isFocused]);
 
-  setStatusFilter = status => {
-    if (status !== 'Delivered') {
-      setOrderList([...data.filter(e => e.status == status)]);
+  setStatusFilter = (status) => {
+    if (status !== "Delivered") {
+      setOrderList([...data.filter((e) => e.status == status)]);
     } else {
       // setDatalist(data);
-      setOrderList([...data.filter(e => e.status == status)]);
+      setOrderList([...data.filter((e) => e.status == status)]);
     }
     setstatus(status);
   };
@@ -81,18 +81,18 @@ const MyOrderTab = ({navigation}) => {
   //   alert(file.filePath);
   // };
   const isPermitted = async () => {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       try {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
           {
-            title: 'External Storage Write Permission',
-            message: 'App needs access to Storage data',
-          },
+            title: "External Storage Write Permission",
+            message: "App needs access to Storage data",
+          }
         );
         return granted === PermissionsAndroid.RESULTS.GRANTED;
       } catch (err) {
-        alert('Write permission err', err);
+        alert("Write permission err", err);
         return false;
       }
     } else {
@@ -511,49 +511,49 @@ const MyOrderTab = ({navigation}) => {
   </table>
         `;
 
-  const sharePdf = async item => {
+  const sharePdf = async (item) => {
     if (await isPermitted()) {
       let options = {
         //Content to print
         html: htmlstring,
         //File Name
-        fileName: 'Cafe' + fileName,
+        fileName: "Cafe" + fileName,
         //File directory
-        directory: 'Documents',
+        directory: "Documents",
         base64: true,
       };
       let file = await RNHTMLtoPDF.convert(options);
       let filePath =
-        RNFetchBlob.fs.dirs.DownloadDir + '/cafe ' + fileName + '.pdf';
-      const ShareResponse = await Share.open({url: filePath});
+        RNFetchBlob.fs.dirs.DownloadDir + "/cafe " + fileName + ".pdf";
+      const ShareResponse = await Share.open({ url: filePath });
       console.log(file.filePath);
       alert(file.filePath);
     }
   };
 
-  const createPDF = async item => {
+  const createPDF = async (item) => {
     if (await isPermitted()) {
       let options = {
         //Content to print
         html: htmlstring,
         //File Name
-        fileName: 'Cafe' + fileName,
+        fileName: "Cafe" + fileName,
         //File directory
-        directory: 'Documents',
+        directory: "Documents",
         base64: true,
       };
       let file = await RNHTMLtoPDF.convert(options);
       let filePath =
-        RNFetchBlob.fs.dirs.DownloadDir + '/cafe ' + fileName + '.pdf';
+        RNFetchBlob.fs.dirs.DownloadDir + "/cafe " + fileName + ".pdf";
       console.log(RNFetchBlob.fs.dirs.DownloadDir);
       RNFetchBlob.fs
-        .writeFile(filePath, file.base64, 'base64')
+        .writeFile(filePath, file.base64, "base64")
 
-        .then(response => {
-          console.log('sucess log :', response);
+        .then((response) => {
+          console.log("sucess log :", response);
         })
-        .catch(response => {
-          console.log('error log:', response);
+        .catch((response) => {
+          console.log("error log:", response);
         });
 
       console.log(file.filePath);
@@ -564,20 +564,23 @@ const MyOrderTab = ({navigation}) => {
   return (
     <View style={styles.Container}>
       <StatusBar
-        backgroundColor={'white'}
-        barStyle={'dark-content'}
-        showHideTransition={'fade'}
+        backgroundColor={"white"}
+        barStyle={"dark-content"}
+        showHideTransition={"fade"}
       />
-      <TouchableOpacity
-        style={styles.BackContainer}
-        onPress={() => navigation.goBack()}>
-        <Image
-          source={icon.BackBotton}
-          style={{height: 25, width: 25, marginLeft: 25}}
-        />
-      </TouchableOpacity>
-      {/* <Text style={styles.TitleText}>My Orders</Text> */}
-      <Text style={styles.TitleText}>My Orders</Text>
+      <View style={{ width: "100%" }}>
+        <TouchableOpacity
+          style={styles.BackContainer}
+          onPress={() => navigation.goBack()}
+        >
+          <Image
+            source={icon.BackBotton}
+            style={{ height: 25, width: 25, marginLeft: 25 }}
+          />
+        </TouchableOpacity>
+        {/* <Text style={styles.TitleText}>My Orders</Text> */}
+        <Text style={styles.TitleText}>My Orders</Text>
+      </View>
       <View style={styles.listContainer}>
         {listData.map((e, index) => (
           <TouchableOpacity
@@ -586,12 +589,14 @@ const MyOrderTab = ({navigation}) => {
               styles.btnContainer,
               status == e.status && styles.btnContainerActive,
             ]}
-            onPress={() => setStatusFilter(e.status)}>
+            onPress={() => setStatusFilter(e.status)}
+          >
             <Text
               style={[
                 styles.btnText,
                 status == e.status && styles.btnTextActive,
-              ]}>
+              ]}
+            >
               {e.status}
             </Text>
           </TouchableOpacity>
@@ -600,12 +605,13 @@ const MyOrderTab = ({navigation}) => {
       {oredrList == null ? (
         <Text
           style={{
-            alignSelf: 'center',
+            alignSelf: "center",
             marginTop: 30,
-            fontWeight: '700',
-            color: 'black',
+            fontWeight: "700",
+            color: "black",
             fontSize: 17,
-          }}>
+          }}
+        >
           No Data Found...
         </Text>
       ) : (
@@ -616,15 +622,16 @@ const MyOrderTab = ({navigation}) => {
                 <View style={styles.statusContainer}>
                   <Image
                     source={icon.instant}
-                    style={{width: 16, height: 16, marginLeft: 10}}
+                    style={{ width: 16, height: 16, marginLeft: 10 }}
                   />
                   <Text
                     style={{
                       fontSize: 12,
-                      fontWeight: '700',
-                      color: '#332F2E',
+                      fontWeight: "700",
+                      color: "#332F2E",
                       marginLeft: 4,
-                    }}>
+                    }}
+                  >
                     instant delivery
                   </Text>
                 </View>
@@ -634,28 +641,30 @@ const MyOrderTab = ({navigation}) => {
                       createPDF(item), setorderData(item);
                       // setfilename(item.orderID);
                       // console.log('FIleName:' + item.orderID);
-                      console.log('orderdata00' + item);
-                    }}>
+                      console.log("orderdata00" + item);
+                    }}
+                  >
                     <Image
                       source={icon.DownloadIcon}
-                      style={{width: 12, height: 12, marginLeft: 6.77}}
+                      style={{ width: 12, height: 12, marginLeft: 6.77 }}
                     />
                   </TouchableOpacity>
                   <View
                     style={{
                       width: 1,
                       height: 11.5,
-                      backgroundColor: '#00000014',
+                      backgroundColor: "#00000014",
                       marginLeft: 8.5,
                     }}
                   />
                   <TouchableOpacity
                     onPress={() => {
                       sharePdf(item);
-                    }}>
+                    }}
+                  >
                     <Image
                       source={icon.Share}
-                      style={{width: 11, height: 11, marginLeft: 8.46}}
+                      style={{ width: 11, height: 11, marginLeft: 8.46 }}
                     />
                   </TouchableOpacity>
                 </View>
@@ -673,11 +682,11 @@ const MyOrderTab = ({navigation}) => {
                 </View>
                 <View
                   style={{
-                    width: '77.18%',
+                    width: "77.18%",
                     height: 1,
-                    backgroundColor: '#000000',
+                    backgroundColor: "#000000",
                     opacity: 0.1,
-                    alignSelf: 'center',
+                    alignSelf: "center",
                   }}
                 />
                 <View style={styles.orderDetails2}>
@@ -699,7 +708,7 @@ const MyOrderTab = ({navigation}) => {
                   }}
                 /> */}
                 </View>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: "row" }}>
                   <TouchableOpacity style={styles.btnCancel}>
                     <Text style={styles.btn}>Cancel</Text>
                   </TouchableOpacity>
@@ -726,28 +735,29 @@ export default MyOrderTab;
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
   },
   BackContainer: {
-    width: '100%',
+    width: "100%",
     height: 25,
     // backgroundColor: 'black',
-    justifyContent: 'center',
+    justifyContent: "center",
     marginTop: 32,
   },
   TitleText: {
     fontSize: 17,
-    fontWeight: '700',
-    color: '#332F2E',
-    marginTop: 14.6,
+    fontWeight: "700",
+    color: "#332F2E",
+    position: "absolute",
+    marginTop: 32,
     // left: '50%',
     // marginLeft: -41,
-    alignSelf: 'center',
+    alignSelf: "center",
     // backgroundColor: 'black',
   },
   listContainer: {
     marginTop: 37,
-    flexDirection: 'row',
+    flexDirection: "row",
     marginLeft: 44,
     // backgroundColor: 'black',
   },
@@ -756,32 +766,32 @@ const styles = StyleSheet.create({
     width: 135,
     height: 47,
     borderWidth: 1,
-    borderColor: '#999392',
+    borderColor: "#999392",
     borderRadius: 8,
     marginRight: 13,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   btnContainerActive: {
-    borderColor: '#E94B64',
+    borderColor: "#E94B64",
   },
 
   btnText: {
     fontSize: 21,
-    fontWeight: '400',
-    color: '#332F2E',
+    fontWeight: "400",
+    color: "#332F2E",
     opacity: 0.2,
   },
   btnTextActive: {
-    color: '#E94B64',
+    color: "#E94B64",
     opacity: 1,
   },
   cardContainer: {
-    borderColor: '#E6E2E1',
+    borderColor: "#E6E2E1",
     borderWidth: 1,
     width: 343,
     height: 276,
-    alignSelf: 'center',
+    alignSelf: "center",
     // backgroundColor: 'black',
     marginTop: 28,
     borderRadius: 12,
@@ -789,45 +799,45 @@ const styles = StyleSheet.create({
   statusContainer: {
     width: 138,
     height: 32,
-    backgroundColor: '#F2F2F2',
+    backgroundColor: "#F2F2F2",
     borderRadius: 10,
     marginLeft: 7,
     marginTop: 7,
-    flexDirection: 'row',
+    flexDirection: "row",
     // justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: "center",
   },
   statusContainer2: {
     width: 55,
     height: 24,
-    backgroundColor: '#F2F2F2',
+    backgroundColor: "#F2F2F2",
     borderRadius: 6,
     marginLeft: 7,
     marginTop: 7,
-    flexDirection: 'row',
-    alignItems: 'center',
-    position: 'absolute',
+    flexDirection: "row",
+    alignItems: "center",
+    position: "absolute",
     right: 9,
   },
   orderDetails: {
-    width: '100%',
+    width: "100%",
     height: 66,
     // backgroundColor: 'black',
     marginTop: 15,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   ordertitleText: {
     fontSize: 11,
-    fontWeight: '400',
-    color: '#807A79',
+    fontWeight: "400",
+    color: "#807A79",
     marginLeft: 38,
     marginTop: 16,
     // backgroundColor: 'black',
   },
   ordertitleText2: {
     fontSize: 11,
-    fontWeight: '400',
-    color: '#807A79',
+    fontWeight: "400",
+    color: "#807A79",
     marginLeft: 38,
     // marginStart: 38,
     marginTop: 18,
@@ -835,187 +845,187 @@ const styles = StyleSheet.create({
   },
   ordertitleText3: {
     fontSize: 11,
-    fontWeight: '400',
-    color: '#807A79',
+    fontWeight: "400",
+    color: "#807A79",
     marginLeft: 122,
-    position: 'absolute',
+    position: "absolute",
     // marginStart: 38,
     marginTop: 18,
     // backgroundColor: 'black',
   },
   ordertitleText4: {
     fontSize: 11,
-    fontWeight: '400',
-    color: '#807A79',
+    fontWeight: "400",
+    color: "#807A79",
     marginLeft: 222,
-    position: 'absolute',
+    position: "absolute",
     // marginStart: 38,
     marginTop: 18,
     // backgroundColor: 'black',
   },
   orderDynamicText: {
     fontSize: 11,
-    fontWeight: '500',
-    color: '#332F2E',
-    position: 'absolute',
+    fontWeight: "500",
+    color: "#332F2E",
+    position: "absolute",
     marginTop: 36,
     marginLeft: 38,
   },
   orderDynamicText2: {
     fontSize: 11,
-    fontWeight: '500',
-    color: '#332F2E',
-    position: 'absolute',
+    fontWeight: "500",
+    color: "#332F2E",
+    position: "absolute",
     marginTop: 36,
     marginLeft: 122,
   },
   orderDynamicText3: {
     fontSize: 11,
-    fontWeight: '500',
-    color: '#332F2E',
-    position: 'absolute',
+    fontWeight: "500",
+    color: "#332F2E",
+    position: "absolute",
     marginTop: 36,
     marginLeft: 222,
   },
   orderDynamicText4: {
     fontSize: 11,
-    fontWeight: '500',
-    color: '#332F2E',
-    position: 'absolute',
+    fontWeight: "500",
+    color: "#332F2E",
+    position: "absolute",
     marginTop: 36,
     marginLeft: 122,
   },
   orderDynamicText5: {
     fontSize: 11,
-    fontWeight: '500',
-    color: '#332F2E',
-    position: 'absolute',
+    fontWeight: "500",
+    color: "#332F2E",
+    position: "absolute",
     marginTop: 36,
     marginLeft: 222,
   },
   orderDetails2: {
-    width: '100%',
+    width: "100%",
     height: 71,
     // backgroundColor: 'black',
     // marginTop: 15,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   btnCancel: {
     width: 138.51,
     height: 56,
     borderWidth: 1,
-    borderColor: '#4E4E4E',
+    borderColor: "#4E4E4E",
     borderRadius: 12,
     marginLeft: 25,
     marginTop: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   TrackContainer: {
     width: 138.51,
     height: 56,
     borderWidth: 1,
-    borderColor: '#E94B64',
-    backgroundColor: '#E94B64',
+    borderColor: "#E94B64",
+    backgroundColor: "#E94B64",
     borderRadius: 12,
     marginLeft: 25,
     marginTop: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   btn: {
     fontSize: 16,
-    fontWeight: '500',
-    color: '#CDCDCD',
+    fontWeight: "500",
+    color: "#CDCDCD",
   },
   Trackbtn: {
     fontSize: 16,
-    fontWeight: '500',
-    color: '#FFFFFF',
+    fontWeight: "500",
+    color: "#FFFFFF",
   },
 });
 
 const listData = [
   {
-    status: 'Delivered',
+    status: "Delivered",
   },
   {
-    status: 'In progress',
+    status: "In progress",
   },
 ];
 
 const data = [
   {
     id: 1,
-    orderID: '#8765763',
-    ordernumber: '98695951',
-    arrrivingAT: '18min Left (Today)',
-    amount: '$40',
-    items: '6',
-    status: 'In progress',
+    orderID: "#8765763",
+    ordernumber: "98695951",
+    arrrivingAT: "18min Left (Today)",
+    amount: "$40",
+    items: "6",
+    status: "In progress",
     icons: icon.InProgress,
-    productName: 'Espresso',
-    price: '₹40',
+    productName: "Espresso",
+    price: "₹40",
   },
   {
     id: 6,
-    orderID: '#8765760',
-    ordernumber: '98695952',
-    arrrivingAT: '32min Left (Today)',
-    amount: '$40',
-    items: '2',
-    status: 'Delivered',
+    orderID: "#8765760",
+    ordernumber: "98695952",
+    arrrivingAT: "32min Left (Today)",
+    amount: "$40",
+    items: "2",
+    status: "Delivered",
     icons: icon.InProgress,
-    productName: 'Espresso',
-    price: '₹60',
+    productName: "Espresso",
+    price: "₹60",
   },
   {
     id: 2,
-    status: 'Delivered',
-    orderID: '#8765764',
-    ordernumber: '98695982',
-    arrrivingAT: '16 Nov,21',
-    amount: '$240',
-    items: '2',
+    status: "Delivered",
+    orderID: "#8765764",
+    ordernumber: "98695982",
+    arrrivingAT: "16 Nov,21",
+    amount: "$240",
+    items: "2",
     icons: icon.Success,
-    productName: 'Espresso',
-    price: '₹240',
+    productName: "Espresso",
+    price: "₹240",
   },
   {
     id: 3,
-    orderID: '#8765764',
-    ordernumber: '98695952',
-    arrrivingAT: '32min Left (Today)',
-    amount: '$40',
-    items: '2',
-    status: 'In progress',
+    orderID: "#8765764",
+    ordernumber: "98695952",
+    arrrivingAT: "32min Left (Today)",
+    amount: "$40",
+    items: "2",
+    status: "In progress",
     icons: icon.InProgress,
-    productName: 'Espresso',
-    price: '₹40',
+    productName: "Espresso",
+    price: "₹40",
   },
   {
     id: 4,
-    status: 'Delivered',
-    orderID: '#8765764',
-    ordernumber: '98695952',
-    arrrivingAT: '1 Nov,21',
-    amount: '$120',
-    items: '2',
+    status: "Delivered",
+    orderID: "#8765764",
+    ordernumber: "98695952",
+    arrrivingAT: "1 Nov,21",
+    amount: "$120",
+    items: "2",
     icons: icon.Success,
-    productName: 'Espresso',
-    price: '₹120',
+    productName: "Espresso",
+    price: "₹120",
   },
   {
     id: 5,
-    status: 'Delivered',
-    orderID: '#876554',
-    ordernumber: '99595952',
-    arrrivingAT: '6 Nov,21',
-    amount: '$80',
-    items: '2',
+    status: "Delivered",
+    orderID: "#876554",
+    ordernumber: "99595952",
+    arrrivingAT: "6 Nov,21",
+    amount: "$80",
+    items: "2",
     icons: icon.Success,
-    productName: 'Espresso',
-    price: '₹80',
+    productName: "Espresso",
+    price: "₹80",
   },
 ];
 

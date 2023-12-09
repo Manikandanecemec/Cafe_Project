@@ -374,7 +374,7 @@ const Cart = ({ navigation }) => {
       total = total + item.qty;
     });
     return total;
-    setcartTotal(total);
+    // setcartTotal(total);
     // console.log(CartTotal);
   };
 

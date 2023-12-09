@@ -22,6 +22,7 @@ const Wishlist = ({ navigation }) => {
   const [Resgistered, setResgistered] = useState("false");
   const [wishlist, setwishlist] = useState([]);
   const isFocused = useIsFocused();
+  const [Update, SetUpdate] = useState("");
 
   const increaseQuantity = (productId) => {
     setdata((prevdata) =>
@@ -69,45 +70,6 @@ const Wishlist = ({ navigation }) => {
   }
   console.log(Useruid);
 
-  // const saveUser = () => {
-  //   setResgistered(true);
-  //   setModalVisible(true);
-  //   const userId = Useruid;
-  //   if (CartList == null) {
-  //     console.log('cart is empty');
-  //     firestore()
-  //       .collection('users')
-  //       .doc(userId)
-  //       .set({
-  //         name: Username,
-  //         email: Useremail,
-  //         password: UseremailVerified,
-  //         mobile: UserphoneNumber,
-  //         userId: userId,
-  //         cart: [],
-  //       })
-  //       .then(res => {
-  //         setModalVisible(false);
-  //         // navigation.goBack();
-  //       })
-  //       .catch(error => {
-  //         setModalVisible(false);
-  //         console.log(error);
-  //       });
-  //   }
-  // };
-
-  // const Addwishlist =async(item)=>{
-  //   const userId = Useruid;
-  //   const user = await firestore().collection('users').doc(userId).get();
-  //   let tempDart = [];
-  //   tempDart = user._data.wishlist;
-  //   tempDart.push(item);
-  //   firestore().collection('users').doc(userId).update({
-  //     wishlist: tempDart,
-  //   });
-  // }
-
   const addItemToCart = async (item) => {
     const userId = Useruid;
 
@@ -144,12 +106,14 @@ const Wishlist = ({ navigation }) => {
     const userId = Useruid;
     const user = await firestore().collection("users").doc(userId).get();
     let tempDart = [];
-    tempDart = user._data.cart;
+    tempDart = user._data.wishlist;
     tempDart.splice(index, 1);
     firestore().collection("users").doc(userId).update({
-      cart: tempDart,
+      wishlist: tempDart,
     });
+    console.log("the selected product is deleted to whishlist");
     // setCartList(user._data.cart);
+    getwishlist();
   };
 
   const RemoveitemfromCart = async (item) => {
@@ -158,7 +122,7 @@ const Wishlist = ({ navigation }) => {
     const user = await firestore().collection("users").doc(userId).get();
     let tempDart = [];
     console.log(tempDart);
-    tempDart = user._data.cart;
+    tempDart = user._data.wishlist;
     if (tempDart.length > 0) {
       tempDart.map((itm) => {
         if (itm.id == item.id) {
@@ -166,7 +130,7 @@ const Wishlist = ({ navigation }) => {
           console.log("Remove from cart");
         }
         firestore().collection("users").doc(userId).update({
-          cart: tempDart,
+          wishlist: tempDart,
         });
       });
     }
@@ -183,6 +147,7 @@ const Wishlist = ({ navigation }) => {
     if (Resgistered == "false") {
       // console.log('useffert cartlist:' + CartList);
       getwishlist();
+      console.log("use effect");
     }
 
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
@@ -202,7 +167,7 @@ const Wishlist = ({ navigation }) => {
         setLoading(false);
       });
     return subscriber; // unsubscribe on unmount
-  }, [isFocused]);
+  }, [isFocused, Update]);
 
   if (loading) {
     return <Text>Data is loading...</Text>;
@@ -305,8 +270,10 @@ const Wishlist = ({ navigation }) => {
                         <CartaddContainer>
                           <TouchableOpacity
                             onPress={() => {
-                              RemoveitemfromCart(item);
-                              decreaseQuantity(item.id);
+                              // RemoveitemfromCart(item);
+                              deleteitermfromCart(index);
+                              SetUpdate("updated");
+                              // decreaseQuantity(item.id);
                               // // deleteitermfromCart(index);
                               // if (item.qty > 1) {
                               //   RemoveitemfromCart(item);
@@ -330,7 +297,9 @@ const Wishlist = ({ navigation }) => {
                           <TouchableOpacity
                             onPress={() => {
                               // console.log(item.qty);
-                              addItemToCart(item), increaseQuantity(item.id);
+                              addItemToCart(item),
+                                increaseQuantity(item.id),
+                                SetUpdate("updated");
                             }}
                           >
                             <SubContainer>
