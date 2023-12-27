@@ -102,88 +102,88 @@ const renderDelivery = ({ item, index }) => {
   );
 };
 
-const renderItem = ({ item, index }) => {
-  return (
-    <TouchableOpacity key={index} style={{ marginTop: 16 }}>
-      <BigContainer style={{ flex: 1, backgroundColor: ColorTheme.white }}>
-        <Container>
-          <ProductContainer>
-            <Image
-              style={{ width: "100%", height: "100%" }}
-              source={item.url}
-              // {icon.Filtercoffee}
-            />
-          </ProductContainer>
-          <PerText>
-            {/* Filter coffee */}
-            {item.productName}
-          </PerText>
-          <StarContainerall>
-            <Cont>
-              <StarContainer>
-                <StarImage source={require("../assets/star.png")} />
-              </StarContainer>
-              <StarContainer>
-                <StarImage source={require("../assets/star.png")} />
-              </StarContainer>
-              <StarContainer>
-                <StarImage source={require("../assets/star.png")} />
-              </StarContainer>
-              <StarContainer>
-                <StarImage source={require("../assets/stargray.png")} />
-              </StarContainer>
-              <StarContainer>
-                <StarImage source={require("../assets/stargray.png")} />
-              </StarContainer>
-            </Cont>
-            <RatingText>
-              {item.RatingValue1}
-              {/* 23 */}
-            </RatingText>
-          </StarContainerall>
-          <PriceText>
-            {/* ₹60 */}
-            {item.price}
-          </PriceText>
+// const renderItem = ({ item, index }) => {
+//   return (
+//     <TouchableOpacity key={index} style={{ marginTop: 16 }}>
+//       <BigContainer style={{ flex: 1, backgroundColor: ColorTheme.white }}>
+//         <Container>
+//           <ProductContainer>
+//             <Image
+//               style={{ width: "100%", height: "100%" }}
+//               source={item.url}
+//               // {icon.Filtercoffee}
+//             />
+//           </ProductContainer>
+//           <PerText>
+//             {/* Filter coffee */}
+//             {item.productName}
+//           </PerText>
+//           <StarContainerall>
+//             <Cont>
+//               <StarContainer>
+//                 <StarImage source={require("../assets/star.png")} />
+//               </StarContainer>
+//               <StarContainer>
+//                 <StarImage source={require("../assets/star.png")} />
+//               </StarContainer>
+//               <StarContainer>
+//                 <StarImage source={require("../assets/star.png")} />
+//               </StarContainer>
+//               <StarContainer>
+//                 <StarImage source={require("../assets/stargray.png")} />
+//               </StarContainer>
+//               <StarContainer>
+//                 <StarImage source={require("../assets/stargray.png")} />
+//               </StarContainer>
+//             </Cont>
+//             <RatingText>
+//               {item.RatingValue1}
+//               {/* 23 */}
+//             </RatingText>
+//           </StarContainerall>
+//           <PriceText>
+//             {/* ₹60 */}
+//             {item.price}
+//           </PriceText>
 
-          <CartaddContainer>
-            <TouchableOpacity onPress={() => this.props.removeItem(item)}>
-              <AddContainer>
-                <Image source={icon.Minus} style={{ height: 15, width: 15 }} />
-              </AddContainer>
-            </TouchableOpacity>
+//           <CartaddContainer>
+//             <TouchableOpacity onPress={() => this.props.removeItem(item)}>
+//               <AddContainer>
+//                 <Image source={icon.Minus} style={{ height: 15, width: 15 }} />
+//               </AddContainer>
+//             </TouchableOpacity>
 
-            <CountContainer>
-              <AddText>{/* {this.props.cartItems.length} */}1</AddText>
-            </CountContainer>
+//             <CountContainer>
+//               <AddText>{/* {this.props.cartItems.length} */}1</AddText>
+//             </CountContainer>
 
-            <TouchableOpacity onPress={() => this.props.addItemToCart(item)}>
-              <SubContainer>
-                <Image
-                  source={icon.Addition}
-                  style={{ height: 15, width: 15 }}
-                />
-              </SubContainer>
-            </TouchableOpacity>
-          </CartaddContainer>
+//             <TouchableOpacity onPress={() => this.props.addItemToCart(item)}>
+//               <SubContainer>
+//                 <Image
+//                   source={icon.Addition}
+//                   style={{ height: 15, width: 15 }}
+//                 />
+//               </SubContainer>
+//             </TouchableOpacity>
+//           </CartaddContainer>
 
-          <PercentageContainer>
-            <PerIconC>
-              <Image
-                source={icon.Coupon}
-                style={{ height: 9.25, width: 9.25 }}
-              />
-            </PerIconC>
-            <PerTextC>
-              <PercentageText>{item.discount}</PercentageText>
-            </PerTextC>
-          </PercentageContainer>
-          <CustomText>CUSTOMIZE</CustomText>
-        </Container>
-      </BigContainer>
-    </TouchableOpacity>
-  );
-};
+//           <PercentageContainer>
+//             <PerIconC>
+//               <Image
+//                 source={icon.Coupon}
+//                 style={{ height: 9.25, width: 9.25 }}
+//               />
+//             </PerIconC>
+//             <PerTextC>
+//               <PercentageText>{item.discount}</PercentageText>
+//             </PerTextC>
+//           </PercentageContainer>
+//           <CustomText>CUSTOMIZE</CustomText>
+//         </Container>
+//       </BigContainer>
+//     </TouchableOpacity>
+//   );
+// };
 
 const Cart = ({ navigation }) => {
   const [status, setstatus] = useState("Delivery Now");
@@ -197,7 +197,10 @@ const Cart = ({ navigation }) => {
   const [CouponText, setCouponText] = useState("");
   const [CouponData, setCouponData] = useState([]);
   const [AppliedCouponData, SetAppliedCouponData] = useState([]);
-  const [AppliedCouponValue, SetAppliedCouponValue] = useState();
+  const [AppliedCouponValue, SetAppliedCouponValue] = useState("");
+  const [CouponValue, SetCouponValue] = useState("0");
+  const [Comment, setComment] = useState("");
+  const [CouponCode, SetCouponCode] = useState("");
 
   const usergetdata = auth().currentUser;
 
@@ -255,10 +258,13 @@ const Cart = ({ navigation }) => {
         console.log("Coupocheck data" + itm);
         SetAppliedCouponData(itm);
         console.log("AppliedCouponValue" + itm.Price);
+        SetCouponValue(itm.Price);
         SetAppliedCouponValue(itm.Price);
+        SetCouponCode(itm.Code);
         setCoupon("false");
-      } else {
-        SetAppliedCouponValue("Invaliedcoupon");
+      } else if (itm.Code != Text) {
+        console.log("Data Validated not suitable");
+        SetAppliedCouponValue("0");
       }
     });
   };
@@ -336,15 +342,8 @@ const Cart = ({ navigation }) => {
               <Text style={{ color: "white" }}>Apply</Text>
             </View>
           </TouchableOpacity>
-
-          {/* <Text style={styles.cmtText}>
-                Write instructions for smoother delivery
-              </Text> */}
-          {/* <TouchableOpacity style={{ position: "absolute", right: 29 }}>
-          <Image source={icon.Edit} style={{ width: 12, height: 12 }} />
-        </TouchableOpacity> */}
         </View>
-        {AppliedCouponValue == "Invaliedcoupon" ? (
+        {AppliedCouponValue == "0" ? (
           <Text style={{ marginLeft: 40, color: "red" }}>*Invalied Coupon</Text>
         ) : (
           <View
@@ -377,15 +376,23 @@ const Cart = ({ navigation }) => {
     // setcartTotal(total);
     // console.log(CartTotal);
   };
-
   const getTotal = () => {
     let total = 0;
     CartList.map((item) => {
       total = total + item.qty * item.price;
     });
+
     return total;
-    // setcartTotal(total)
-    // console.log(CartTotal)
+  };
+
+  const ToPay = () => {
+    let total = 0;
+    CartList.map((item) => {
+      total = total + item.qty * item.price;
+    });
+    let ToPay = total - CouponValue;
+
+    return ToPay;
   };
 
   function PriceTag() {
@@ -393,15 +400,16 @@ const Cart = ({ navigation }) => {
       <View style={styles.priceContainer}>
         <Text style={styles.totalText}>Item total</Text>
         <Text style={styles.totalPrice}>
-          {/* ₹300 */}
+          {/* ₹300 */}₹
           {
-            // getTotal()
-            getItem()
+            getTotal()
+
+            // getItem()
           }
         </Text>
         <Text style={styles.CouponText}>Coupon discount</Text>
         <Text style={styles.couponValue}>
-          ₹{AppliedCouponData == "" ? 0 : AppliedCouponData.Price}
+          {AppliedCouponData == "" ? "₹0" : "- ₹" + AppliedCouponData.Price}
         </Text>
         <View
           style={{
@@ -430,7 +438,7 @@ const Cart = ({ navigation }) => {
         />
         <Text style={styles.payText}>To pay</Text>
         <Text style={styles.payAmount}>
-          ₹{getTotal()}
+          ₹{ToPay()}
           {/* ₹{getTotal() - AppliedCouponValue} */}
           {/* {CartTotal - AppliedCouponValue} */}
           {/* {CartTotal} */}
@@ -491,6 +499,17 @@ const Cart = ({ navigation }) => {
     });
     setCartList(user._data.cart);
     // getCartItems();
+  };
+
+  const AddCartDataTotal = async () => {
+    const userId = usergetdata.uid;
+    firestore().collection("users").doc(userId).update({
+      couponValue: CouponValue,
+      CouponCode: CouponCode,
+      orderComment: Comment,
+      CartTotal: ToPay(),
+    });
+    navigation.navigate("Profile");
   };
 
   if (loading) {
@@ -660,13 +679,7 @@ const Cart = ({ navigation }) => {
               </BigContainer>
             </TouchableOpacity>
           ))}
-          {/* <FlatList
-              data={this.props.cartItems}
-              nestedScrollEnabled={true}
-              keyExtractor={i => i.toString()}
-              renderItem={renderItem}
-              // numColumns={numColumns}
-            /> */}
+
           {Coupon == "false" ? renderProduct() : Applycoupon()}
           <View style={{ height: 15 }}></View>
 
@@ -801,6 +814,7 @@ const Cart = ({ navigation }) => {
                 width: "86%",
                 // alignSelf: 'center',
               }}
+              onChangeText={(txt) => setComment(txt)}
             ></TextInput>
             {/* <Text style={styles.cmtText}>
                 Write instructions for smoother delivery
@@ -814,6 +828,7 @@ const Cart = ({ navigation }) => {
             style={styles.bottomCon}
             onPress={() => {
               // addCartTotalValue();
+              AddCartDataTotal();
               navigation.push("AddressPage");
             }}
           >
@@ -1177,17 +1192,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#99939229",
     borderRadius: 8,
-    // marginBottom: 10,
-    // alignSelf: "center",
-    // marginTop: 22,
+
     marginLeft: 30,
     borderRadius: 8,
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
-    // borderBottomLeftRadius: 0,
-    // borderTopStartRadius: 0,
-    // borderBottomStartRadius: 0,
-    // justifyContent: "center",
   },
   divContainer: {
     width: "77.18%",

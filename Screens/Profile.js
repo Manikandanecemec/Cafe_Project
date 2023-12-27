@@ -241,7 +241,7 @@ export default function Profile({ navigation }) {
               <ImageP source={imageuri} />
             </ProfileIcon>
           </TouchableOpacity>
-          <NameText>{Email == "" ? "Gust" : Name}</NameText>
+          <NameText>{Email == null ? "Gust" : Name}</NameText>
           <MobileNumber style={styles.MobilenumberText}>
             {Email == ""
               ? "Enter Your Mobile Number"

@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
-import CafeHomeSlider from '../Components/CafeHomeSlider';
-import CafeCategoriesContainer from '../Components/CafeCategoriesContainer';
-import SplashScreen from 'react-native-splash-screen';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import auth from '@react-native-firebase/auth';
-import Lottie from 'lottie-react-native';
+import React, { useState } from "react";
+import styled from "styled-components";
+import CafeHomeSlider from "../Components/CafeHomeSlider";
+import CafeCategoriesContainer from "../Components/CafeCategoriesContainer";
+import SplashScreen from "react-native-splash-screen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import auth from "@react-native-firebase/auth";
+import Lottie from "lottie-react-native";
 
 import {
   View,
@@ -19,20 +19,20 @@ import {
   FlatList,
   Dimensions,
   TouchableWithoutFeedback,
-} from 'react-native';
-import CafeCard from '../Components/CafeCard';
-import {connect} from 'react-redux';
-import database from '@react-native-firebase/database';
-import {COLORS, icon} from '../Constant';
-import {useEffect} from 'react';
-import {useIsFocused} from '@react-navigation/native';
-import firestore from '@react-native-firebase/firestore';
+} from "react-native";
+import CafeCard from "../Components/CafeCard";
+import { connect } from "react-redux";
+import database from "@react-native-firebase/database";
+import { COLORS, icon } from "../Constant";
+import { useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import firestore from "@react-native-firebase/firestore";
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
-const CafeHome = ({navigation}) => {
-  const [currentIndex, setcurrentIndex] = useState('0');
-  const [firestoredata, setfirestoredata] = useState('false');
+const CafeHome = ({ navigation }) => {
+  const [currentIndex, setcurrentIndex] = useState("0");
+  const [firestoredata, setfirestoredata] = useState("false");
   const [CartList, setCartList] = useState([]);
   const usergetdata = auth().currentUser;
   const isFocused = useIsFocused();
@@ -62,8 +62,9 @@ const CafeHome = ({navigation}) => {
 
   const getCartItems = async () => {
     const userId = usergetdata.uid;
-    const user = await firestore().collection('users').doc(userId).get();
+    const user = await firestore().collection("users").doc(userId).get();
     setCartList(user._data.cart);
+    console.log("scavgucvs");
   };
 
   function SplashScreenCondition() {
@@ -72,11 +73,11 @@ const CafeHome = ({navigation}) => {
 
   const CreateAccount = () => {
     const userId2 = usergetdata.uid;
-    if (CartList == '') {
+    if (CartList == "") {
       // setfirestoredata('true');
       const userId = userId2;
       firestore()
-        .collection('users')
+        .collection("users")
         .doc(userId)
         .set({
           name: Username,
@@ -88,14 +89,14 @@ const CafeHome = ({navigation}) => {
           address: [],
           orders: [],
         })
-        .then(res => {
+        .then((res) => {
           // setModalVisible(false);
           console.log(res);
           // navigation.goBack();
         })
-        .catch(error => {
+        .catch((error) => {
           // setModalVisible(false);
-          console.log('CreateAccount' + error);
+          console.log("CreateAccount" + error);
         });
       // getCartItems();
     }
@@ -112,13 +113,13 @@ const CafeHome = ({navigation}) => {
 
   const userAccount = async () => {
     if (_user != null) {
-      const Account = await firestore().collection('users').doc(userId).get();
-      console.log('Home screen uid:' + usergetdata.uid);
-      console.log('else if user is not null');
-      if (CartList == '') {
+      const Account = await firestore().collection("users").doc(userId).get();
+      console.log("Home screen uid:" + usergetdata.uid);
+      console.log("else if user is not null");
+      if (CartList == "") {
         CreateAccount();
       } else {
-        setfirestoredata('true');
+        setfirestoredata("true");
       }
     }
   };
@@ -128,28 +129,24 @@ const CafeHome = ({navigation}) => {
     const _user = auth().currentUser;
     // console.log(_user.phoneNumber);
     if (_user == null) {
-      navigation.push('login');
-      console.log('user is null');
+      navigation.push("login");
+      console.log("user is null");
     }
-    // if (_user !== null) {
-    //   setTimeout(() => getCartItems(), 1500);
-    // }
-
     if (usergetdata != null) {
       setTimeout(function () {
         getCartItems();
-        console.log('settime out');
+        console.log("settime out");
       }, 500); // Adjust the delay time (in milliseconds) as needed
     }
 
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     setLoading(true);
     database()
-      .ref('/CafeCardData')
-      .once('value')
-      .then(snapshot => {
+      .ref("/CafeCardData")
+      .once("value")
+      .then((snapshot) => {
         const data = snapshot.val();
-        const newData = Object.keys(data).map(key => ({
+        const newData = Object.keys(data).map((key) => ({
           id: key,
           ...data[key],
         }));
@@ -162,7 +159,7 @@ const CafeHome = ({navigation}) => {
     return subscriber; // unsubscribe on unmount
   }, [isFocused]);
 
-  const renderItems = ({item, index}) => {
+  const renderItems = ({ item, index }) => {
     return (
       <TouchableWithoutFeedback
         key={index}
@@ -173,15 +170,16 @@ const CafeHome = ({navigation}) => {
         <View style={styles.bannerContainer}>
           <View
             style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Image
               style={{
-                width: '102%',
-                height: '102%',
+                width: "102%",
+                height: "102%",
                 // position: 'absolute',
-                alignSelf: 'center',
+                alignSelf: "center",
               }}
               source={item.url1}
             />
@@ -191,8 +189,9 @@ const CafeHome = ({navigation}) => {
             style={styles.TouchConatiner}
             onPress={() => {
               // this.props.addItemToCart(item),
-              navigation.push('Cart');
-            }}>
+              navigation.push("Cart");
+            }}
+          >
             <Text style={styles.clickBotteonText}>Order Now</Text>
           </TouchableOpacity>
         </View>
@@ -205,19 +204,20 @@ const CafeHome = ({navigation}) => {
       <View
         style={{
           flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'white',
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "white",
           // alignSelf: 'center',
           // alignContent: 'center',
-        }}>
+        }}
+      >
         <Lottie
-          source={require('../assets/97930-loading')}
+          source={require("../assets/97930-loading")}
           autoPlay={true}
           loop={true}
           duration={0}
           // loop={false}
-          style={{width: 100, height: 100}}
+          style={{ width: 100, height: 100 }}
         />
       </View>
       // <Text>Data is loading...</Text>
@@ -228,30 +228,32 @@ const CafeHome = ({navigation}) => {
       <SafeAreaView style={styles.container} />
       {/* <StatusBar backgroundColor="gray" /> */}
       <StatusBar
-        backgroundColor={'white'}
-        barStyle={'dark-content'}
-        showHideTransition={'fade'}
+        backgroundColor={"white"}
+        barStyle={"dark-content"}
+        showHideTransition={"fade"}
       />
       {SplashScreenCondition()}
       <ScrollView vertical={true} showsVerticalScrollIndicator={false}>
         <View
           style={{
             // backgroundColor: '#fdf8f4',
-            width: '100%',
+            width: "100%",
             height: 40,
             marginTop: 10,
             // justifyContent: 'center',
             // alignSelf: 'center',
-            flexDirection: 'row',
-          }}>
+            flexDirection: "row",
+          }}
+        >
           <Text
             style={{
               fontSize: 20,
-              fontWeight: '700',
-              color: 'black',
+              fontWeight: "700",
+              color: "black",
               marginLeft: 30,
               // alignSelf: 'center',
-            }}>
+            }}
+          >
             Cafe
           </Text>
           <Image
@@ -260,30 +262,32 @@ const CafeHome = ({navigation}) => {
               height: 30,
               width: 30,
               right: 40,
-              position: 'absolute',
-              alignSelf: 'center',
+              position: "absolute",
+              alignSelf: "center",
             }}
           />
-          <TouchableWithoutFeedback onPress={() => navigation.push('Cart')}>
+          <TouchableWithoutFeedback onPress={() => navigation.push("Cart")}>
             <View
               style={{
                 width: 16,
                 height: 16,
                 borderRadius: 8,
-                backgroundColor: '#e94b64',
-                position: 'absolute',
+                backgroundColor: "#e94b64",
+                position: "absolute",
                 right: 38,
-                justifyContent: 'center',
-                alignItems: 'center',
+                justifyContent: "center",
+                alignItems: "center",
                 marginTop: 8,
-              }}>
+              }}
+            >
               <Text
                 style={{
-                  fontWeight: '700',
+                  fontWeight: "700",
                   fontSize: 10,
-                  position: 'absolute',
-                  color: '#ffffff',
-                }}>
+                  position: "absolute",
+                  color: "#ffffff",
+                }}
+              >
                 {/* 1 */}
                 {CartList.length}
               </Text>
@@ -299,7 +303,7 @@ const CafeHome = ({navigation}) => {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             pagingEnabled
-            onScroll={e => {
+            onScroll={(e) => {
               const x = e.nativeEvent.contentOffset.x;
               setcurrentIndex((x / width).toFixed(0));
             }}
@@ -308,10 +312,11 @@ const CafeHome = ({navigation}) => {
         {/* <Text>Hello </Text> */}
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           {CafeHomeSliderData.map((item, index) => (
             <View
               key={index}
@@ -319,17 +324,18 @@ const CafeHome = ({navigation}) => {
                 height: 8,
                 width: currentIndex == index ? 30 : 8,
                 borderRadius: currentIndex == index ? 5 : 4,
-                backgroundColor: currentIndex == index ? '#e94b64' : '#eeeeee',
+                backgroundColor: currentIndex == index ? "#e94b64" : "#eeeeee",
                 marginLeft: 5,
                 marginTop: 10,
-              }}></View>
+              }}
+            ></View>
           ))}
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+        <TouchableOpacity onPress={() => navigation.navigate("Search")}>
           <SearchContainer>
             <SeachText>Seach coffee, cookies or more </SeachText>
             <SearchIcon>
-              <Image source={icon.Search} style={{height: 25, width: 25}} />
+              <Image source={icon.Search} style={{ height: 25, width: 25 }} />
               {/* <MaterialCommunityIcons name="magnify" color="black" size={25} /> */}
             </SearchIcon>
           </SearchContainer>
@@ -337,10 +343,11 @@ const CafeHome = ({navigation}) => {
         <CategoriesContainer>
           <TitleText>categories</TitleText>
           <TouchableOpacity
-            style={{right: 30, position: 'absolute'}}
+            style={{ right: 30, position: "absolute" }}
             onPress={() => {
-              navigation.navigate('Testtry');
-            }}>
+              navigation.navigate("Testtry");
+            }}
+          >
             <CaptionText>See all</CaptionText>
           </TouchableOpacity>
         </CategoriesContainer>
@@ -353,15 +360,16 @@ const CafeHome = ({navigation}) => {
                 //   catagory: 'Coffee',
                 // });
 
-                navigation.navigate('NewSCrren', {
-                  catagory: 'Coffee',
+                navigation.navigate("NewSCrren", {
+                  catagory: "Coffee",
                   // catagory: 'Beverag',
                   // catagory: 'Cokkies',
                 });
-              }}>
+              }}
+            >
               <CafeCategoriesContainer
-                url={require('../assets/coffee.png')}
-                Text={'Coffee'}
+                url={require("../assets/coffee.png")}
+                Text={"Coffee"}
               />
             </TouchableOpacity>
             <TouchableOpacity
@@ -370,60 +378,63 @@ const CafeHome = ({navigation}) => {
                 //   product: CokkiesData,
                 //   catagory: 'Cokkies',
                 // });
-                navigation.navigate('NewSCrren', {
+                navigation.navigate("NewSCrren", {
                   // catagory: 'Coffee',
                   // catagory: 'Beverag',
-                  catagory: 'Cokkies',
+                  catagory: "Cokkies",
                 });
-              }}>
+              }}
+            >
               <CafeCategoriesContainer
-                url={require('../assets/Cokkies.png')}
-                Text={'Cokkies'}
+                url={require("../assets/Cokkies.png")}
+                Text={"Cokkies"}
               />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('NewSCrren', {
+                navigation.navigate("NewSCrren", {
                   // catagory: 'Coffee',
-                  catagory: 'Beverag',
+                  catagory: "Beverag",
                   // catagory: 'Cokkies',
                 });
-              }}>
+              }}
+            >
               <CafeCategoriesContainer
-                url={require('../assets/Beverag.png')}
-                Text={'Beverag'}
+                url={require("../assets/Beverag.png")}
+                Text={"Beverag"}
               />
             </TouchableOpacity>
           </ScrollView>
         </CategoriesCon>
         <TouchableOpacity
           style={{
-            width: '87.69%',
+            width: "87.69%",
             height: 56,
-            backgroundColor: '#F4F4F4',
-            alignSelf: 'center',
+            backgroundColor: "#F4F4F4",
+            alignSelf: "center",
             marginTop: 27,
             borderRadius: 15,
             borderWidth: 1,
-            borderColor: '#DADADA',
-            flexDirection: 'row',
-            overflow: 'hidden',
-            alignItems: 'center',
+            borderColor: "#DADADA",
+            flexDirection: "row",
+            overflow: "hidden",
+            alignItems: "center",
           }}
-          onPress={() => navigation.navigate('Coupon')}>
+          onPress={() => navigation.navigate("Coupon")}
+        >
           <Image
             source={icon.HomeSCreenCoupon}
-            style={{height: 56, width: 78.07}}
+            style={{ height: 56, width: 78.07 }}
           />
-          <Text style={{fontSize: 14, fontWeight: '700', color: '#332F2E'}}>
+          <Text style={{ fontSize: 14, fontWeight: "700", color: "#332F2E" }}>
             Prices smashed with offer zone
           </Text>
           <Image
             source={icon.includeImage}
-            style={{height: 11, width: 12, marginLeft: 17}}
+            style={{ height: 11, width: 12, marginLeft: 17 }}
           />
         </TouchableOpacity>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TitleText>Recommended for you!</TitleText>
         </View>
 
@@ -433,11 +444,12 @@ const CafeHome = ({navigation}) => {
               <TouchableOpacity
                 key={index}
                 onPress={() => {
-                  navigation.push('ProductTab2', {
+                  navigation.push("ProductTab2", {
                     product: data,
                     datas: datafile,
                   });
-                }}>
+                }}
+              >
                 <CafeCard
                   url={data.url}
                   discount={data.discount}
@@ -585,59 +597,59 @@ const CokkiesData = [
   {
     id: 1,
     url: icon.donut,
-    productName: 'Crinkle cookie',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25',
-    status: 'coffee',
+    productName: "Crinkle cookie",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25",
+    status: "coffee",
   },
   {
     id: 2,
     url: icon.frenchfries,
-    productName: 'french fries',
-    RatingValue1: '30',
-    price: '₹120',
-    discount: '25',
+    productName: "french fries",
+    RatingValue1: "30",
+    price: "₹120",
+    discount: "25",
   },
   {
     id: 3,
     url: icon.macaroons,
-    productName: 'Macaroons',
-    RatingValue1: '28',
-    price: '₹150',
-    discount: '25',
+    productName: "Macaroons",
+    RatingValue1: "28",
+    price: "₹150",
+    discount: "25",
   },
   {
     id: 4,
     url: icon.Heartcokkies,
-    productName: 'Sugar cookie',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25',
+    productName: "Sugar cookie",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25",
   },
   {
     id: 5,
     url: icon.BCokkies,
-    productName: 'Oatmeal raisin',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25% OFF',
+    productName: "Oatmeal raisin",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25% OFF",
   },
   {
     id: 6,
     url: icon.BCokkies1,
-    productName: 'Molasses cookie',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25',
+    productName: "Molasses cookie",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25",
   },
   {
     id: 7,
     url: icon.Oatmealraisin,
-    productName: 'Fortune cookie',
-    RatingValue1: '30',
-    price: '₹120',
-    discount: '25',
+    productName: "Fortune cookie",
+    RatingValue1: "30",
+    price: "₹120",
+    discount: "25",
   },
 ];
 
@@ -645,51 +657,51 @@ const BeverageData = [
   {
     id: 1,
     url: icon.bloodymary,
-    productName: 'Bloody mary',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25',
-    status: 'coffee',
+    productName: "Bloody mary",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25",
+    status: "coffee",
   },
   {
     id: 2,
     url: icon.cocktail,
-    productName: 'Cocktail',
-    RatingValue1: '30',
-    price: '₹120',
-    discount: '25',
+    productName: "Cocktail",
+    RatingValue1: "30",
+    price: "₹120",
+    discount: "25",
   },
   {
     id: 3,
     url: icon.cosmopolitan,
-    productName: 'Cosmopolitan',
-    RatingValue1: '28',
-    price: '₹150',
-    discount: '25',
+    productName: "Cosmopolitan",
+    RatingValue1: "28",
+    price: "₹150",
+    discount: "25",
   },
   {
     id: 4,
     url: icon.mojito,
-    productName: 'Mojito',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25',
+    productName: "Mojito",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25",
   },
   {
     id: 5,
     url: icon.pinacolada,
-    productName: 'Pinacolada',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25',
+    productName: "Pinacolada",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25",
   },
   {
     id: 6,
     url: icon.daiquiri,
-    productName: 'Daiquiri',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25',
+    productName: "Daiquiri",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25",
   },
 ];
 
@@ -697,142 +709,142 @@ const CafeCardData = [
   {
     id: 1,
     url: icon.Filtercoffee,
-    productName: 'Filter coffee',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25',
-    status: 'coffee',
+    productName: "Filter coffee",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25",
+    status: "coffee",
   },
   {
     id: 2,
     url: icon.Espresso,
-    productName: 'Espresso',
-    RatingValue1: '30',
-    price: '₹120',
-    discount: '25',
+    productName: "Espresso",
+    RatingValue1: "30",
+    price: "₹120",
+    discount: "25",
   },
   {
     id: 3,
     url: icon.cappuccino,
-    productName: 'cappuccino',
-    RatingValue1: '28',
-    price: '₹150',
-    discount: '25',
+    productName: "cappuccino",
+    RatingValue1: "28",
+    price: "₹150",
+    discount: "25",
   },
   {
     id: 4,
     url: icon.Filtercoffee,
-    productName: 'Filter coffee',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25',
+    productName: "Filter coffee",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25",
   },
   {
     id: 5,
     url: icon.cappuccino,
-    productName: 'Filter coffee',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25',
+    productName: "Filter coffee",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25",
   },
   {
     id: 6,
     url: icon.cappuccino,
-    productName: 'Filter coffee',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25',
+    productName: "Filter coffee",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25",
   },
   {
     id: 7,
     url: icon.Espresso,
-    productName: 'Espresso',
-    RatingValue1: '30',
-    price: '₹120',
-    discount: '25',
+    productName: "Espresso",
+    RatingValue1: "30",
+    price: "₹120",
+    discount: "25",
   },
 ];
 
 const CafeHomeSliderData = [
   {
     url1: icon.Home1,
-    discount1: 'Flat 25% offer',
+    discount1: "Flat 25% offer",
     id: 1,
     url: icon.Filtercoffee,
-    productName: 'Filter coffee',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25',
-    status: 'coffee',
+    productName: "Filter coffee",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25",
+    status: "coffee",
   },
   {
     url1: icon.Home2,
-    discount1: 'Flat 20% offer',
+    discount1: "Flat 20% offer",
     id: 2,
     url: icon.Filtercoffee,
-    productName: 'Filter coffee',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25',
-    status: 'coffee',
+    productName: "Filter coffee",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25",
+    status: "coffee",
   },
   {
     url1: icon.Home1,
-    discount1: 'Flat 27% offer',
+    discount1: "Flat 27% offer",
     id: 3,
     url: icon.Filtercoffee,
-    productName: 'Filter coffee',
-    RatingValue1: '25',
-    price: '₹60',
-    discount: '25',
-    status: 'coffee',
+    productName: "Filter coffee",
+    RatingValue1: "25",
+    price: "₹60",
+    discount: "25",
+    status: "coffee",
   },
 ];
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     // paddingHorizontal: 6,
     // justifyContent:"center",
   },
   bannerContainer: {
     width: width - 30,
     height: 182.13,
-    backgroundColor: 'black',
+    backgroundColor: "black",
     borderRadius: 18,
     // marginLeft: 22,
     marginStart: 20,
     marginRight: 10,
-    overflow: 'hidden',
+    overflow: "hidden",
     // flexDirection: 'row',
     // justifyContent: 'center',
     // alignItems: 'center',
     marginTop: 10,
   },
   discountText: {
-    position: 'absolute',
+    position: "absolute",
     fontSize: 30,
-    fontWeight: '800',
-    color: 'black',
+    fontWeight: "800",
+    color: "black",
     marginLeft: 29,
     width: 146,
     marginTop: 15,
   },
   TouchConatiner: {
-    width: '27.44%',
+    width: "27.44%",
     height: 28,
-    backgroundColor: '#e94b64',
+    backgroundColor: "#e94b64",
     marginTop: 118.74,
     marginLeft: 29,
     borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
   },
   clickBotteonText: {
     fontSize: 12,
-    fontWeight: '400',
-    color: '#ffffff',
+    fontWeight: "400",
+    color: "#ffffff",
   },
 });

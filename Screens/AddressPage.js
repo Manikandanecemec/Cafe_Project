@@ -19,17 +19,19 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import RazorpayCheckout from "react-native-razorpay";
 
 const AddressPage = ({ navigation }) => {
-  const [status, setstatus] = useState("Home");
   const [Adressdata, setAdressdata] = useState("");
   const isFocused = useIsFocused();
   const usergetdata = auth().currentUser;
-  const [addressId, setaddressId] = useState("");
   const [selectedAddress, setSelectedAddress] = useState([]);
   const [CartList, setCartList] = useState([]);
   const [mobile, setmobile] = useState("");
   const [email, setemail] = useState("");
   const [Name, setName] = useState("");
   const [userId, setuserId] = useState("");
+  const [CartTotal, setCartTotal] = useState("");
+  const [CouponCode, setCouponCode] = useState("");
+  const [orderComment, setorderComment] = useState("");
+  const [couponValue, SetcouponValue] = useState("");
 
   useEffect(() => {
     getAddressList();
@@ -44,6 +46,10 @@ const AddressPage = ({ navigation }) => {
     setName(user._data.name);
     setuserId(user._data.userId);
     setemail(user._data.userId);
+    setCartTotal(user._data.CartTotal);
+    setCouponCode(user._data.CouponCode);
+    setorderComment(user._data.orderComment);
+    SetcouponValue(user._data.couponValue);
   };
 
   const getTotal = () => {
@@ -180,83 +186,86 @@ const AddressPage = ({ navigation }) => {
 
       {/* AdressContainer */}
       <View style={{ marginTop: 29 }} />
-
-      <FlatList
-        // style={{height: 800}}
-        data={selectedAddress}
-        renderItem={({ item, index }) => {
-          return (
-            // <TouchableOpacity
-            //   key={index}
-            //   onPress={() => {
-            //     // setstatus(i.street);
-            //     // saveDeafultAddress(item);
-            //   }}>
-            <View key={index} style={[styles.ActiveContainer]}>
-              <Image
-                source={icon.HomeAddress}
-                style={{
-                  width: 30,
-                  height: 30,
-                  marginTop: 27,
-                  marginLeft: 30,
-                  position: "absolute",
-                }}
-              />
-              {/* <View style={{}}> */}
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontWeight: "600",
-                  color: "#332F2E",
-                  marginTop: 12,
-
-                  marginLeft: 95,
-                }}
-              >
-                {item.Name}
-              </Text>
-              <View
-                style={{
-                  width: "50%",
-                  height: 50,
-                  // backgroundColor: 'black',
-                  marginLeft: 95,
-                }}
-              >
+      {selectedAddress == "" ? (
+        <Text style={{ alignSelf: "center" }}>Add the Address** </Text>
+      ) : (
+        <FlatList
+          // style={{height: 800}}
+          data={selectedAddress}
+          renderItem={({ item, index }) => {
+            return (
+              // <TouchableOpacity
+              //   key={index}
+              //   onPress={() => {
+              //     // setstatus(i.street);
+              //     // saveDeafultAddress(item);
+              //   }}>
+              <View key={index} style={[styles.ActiveContainer]}>
+                <Image
+                  source={icon.HomeAddress}
+                  style={{
+                    width: 30,
+                    height: 30,
+                    marginTop: 27,
+                    marginLeft: 30,
+                    position: "absolute",
+                  }}
+                />
+                {/* <View style={{}}> */}
                 <Text
                   style={{
-                    fontSize: 12,
-                    fontWeight: "400",
-                    color: "#363032",
-                    opacity: 0.6,
+                    fontSize: 15,
+                    fontWeight: "600",
+                    color: "#332F2E",
+                    marginTop: 12,
+
+                    marginLeft: 95,
                   }}
                 >
-                  {/* No.31,Thirvalluvar salai, Villianur, Puducherry - 605 110 */}
-                  No.
-                  {item.DoorNumber +
-                    ", " +
-                    item.Street +
-                    ", \n" +
-                    item.City +
-                    ", " +
-                    item.Pincode +
-                    ",\n" +
-                    "+91 " +
-                    item.mobile}
+                  {item.Name}
                 </Text>
+                <View
+                  style={{
+                    width: "50%",
+                    height: 50,
+                    // backgroundColor: 'black',
+                    marginLeft: 95,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      fontWeight: "400",
+                      color: "#363032",
+                      opacity: 0.6,
+                    }}
+                  >
+                    {/* No.31,Thirvalluvar salai, Villianur, Puducherry - 605 110 */}
+                    No.
+                    {item.DoorNumber +
+                      ", " +
+                      item.Street +
+                      ", \n" +
+                      item.City +
+                      ", " +
+                      item.Pincode +
+                      ",\n" +
+                      "+91 " +
+                      item.mobile}
+                  </Text>
+                </View>
+                {/* </View> */}
+                <TouchableOpacity
+                  style={{ position: "absolute", right: 15, marginTop: 15 }}
+                >
+                  <Image source={icon.Edit} style={{ width: 12, height: 12 }} />
+                </TouchableOpacity>
               </View>
-              {/* </View> */}
-              <TouchableOpacity
-                style={{ position: "absolute", right: 15, marginTop: 15 }}
-              >
-                <Image source={icon.Edit} style={{ width: 12, height: 12 }} />
-              </TouchableOpacity>
-            </View>
-            // </TouchableOpacity>
-          );
-        }}
-      />
+              // </TouchableOpacity>
+            );
+          }}
+        />
+      )}
 
       <TouchableOpacity
         style={{
@@ -265,10 +274,11 @@ const AddressPage = ({ navigation }) => {
           backgroundColor: "#E94B64",
           alignSelf: "center",
           borderRadius: 15,
-          // marginTop: 180,
+          marginTop: 650,
           marginBottom: 21,
           justifyContent: "center",
           alignItems: "center",
+          position: "absolute",
         }}
         // onPress={() => navigation.navigate('Payment')}
         onPress={() => {
@@ -278,7 +288,7 @@ const AddressPage = ({ navigation }) => {
               "https://firebasestorage.googleapis.com/v0/b/cafe-b2e32.appspot.com/o/2.png?alt=media&token=2721ad38-c18a-4a05-b0a6-aee349afe5f6&_gl=1*1j857e9*_ga*NjM4MDcxMDE2LjE2NjA4NzQyODI.*_ga_CW55HF8NVT*MTY5OTE1MDQxMi44My4xLjE2OTkxNTA2MzQuNTIuMC4w",
             currency: "INR",
             key: "rzp_test_JGJygOiH7WhpBX",
-            amount: getTotal() * 100,
+            amount: CartTotal * 100,
             name: "Cafe",
             order_id: "", //Replace this with an order_id created using Orders API.
             prefill: {
@@ -292,6 +302,10 @@ const AddressPage = ({ navigation }) => {
             theme: { color: "#53a20e" },
           };
 
+          //         const[CouponCode,setCouponCode]=useState("");
+          // const[orderComment,setorderComment]=useState('')
+          // const[couponValue,SetcouponValue]=useState("")
+
           RazorpayCheckout.open(options)
             .then((data) => {
               // handle success
@@ -299,12 +313,15 @@ const AddressPage = ({ navigation }) => {
                 status1: "success",
                 paymentId: data.razorpay_payment_id,
                 cartList: CartList,
-                total: getTotal(),
+                total: CartTotal,
                 address: selectedAddress,
                 userId: usergetdata.uid,
                 userName: Name,
                 userEmail: email,
                 userMobile: mobile,
+                CouponCode: CouponCode,
+                orderComment: orderComment,
+                couponValue: couponValue,
                 orderID: "1234567",
                 ordernumber: "98695951",
                 arrrivingAT: "18min Left (Today)",

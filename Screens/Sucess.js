@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -9,22 +9,22 @@ import {
   StyleSheet,
   Dimensions,
   StatusBar,
-} from 'react-native';
-import {icon} from '../Constant';
-import CafeHome from './CafeHome';
-import Lottie from 'lottie-react-native';
-import {useRoute} from '@react-navigation/native';
-import {useEffect} from 'react';
-import firestore from '@react-native-firebase/firestore';
+} from "react-native";
+import { icon } from "../Constant";
+import CafeHome from "./CafeHome";
+import Lottie from "lottie-react-native";
+import { useRoute } from "@react-navigation/native";
+import { useEffect } from "react";
+import firestore from "@react-native-firebase/firestore";
 
-const height = Dimensions.get('window').height;
+const height = Dimensions.get("window").height;
 
-const Success = ({navigation}) => {
+const Success = ({ navigation }) => {
   const route = useRoute();
   // const route = this.props.route.params.product;
 
   useEffect(() => {
-    if (route.params.status1 == 'success') {
+    if (route.params.status1 == "success") {
       placeOrder();
       // console.log('sucess screen' + route.params.userId);
     }
@@ -39,9 +39,9 @@ const Success = ({navigation}) => {
     //             userMobile: mobile,
   }, []);
   const placeOrder = async () => {
-    console.log('sucess screen' + route.params.userId);
+    console.log("sucess screen" + route.params.userId);
     const user = await firestore()
-      .collection('users')
+      .collection("users")
       .doc(route.params.userId)
       .get();
     // let user = await firestore()
@@ -66,12 +66,16 @@ const Success = ({navigation}) => {
       status: route.params.status,
       Numberofitems: route.params.Numberofitems,
     });
-    firestore().collection('users').doc(route.params.userId).update({
+    firestore().collection("users").doc(route.params.userId).update({
       cart: [],
+      CartTotal: "",
+      CouponCode: "",
+      orderComment: "",
+      couponValue: "",
       orders: tempOver,
     });
     firestore()
-      .collection('orders')
+      .collection("orders")
       .add({
         data: {
           items: route.params.cartList,
@@ -88,23 +92,24 @@ const Success = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#ffffff'}}>
+    <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <StatusBar
-        backgroundColor={'white'}
-        barStyle={'dark-content'}
-        showHideTransition={'fade'}
+        backgroundColor={"white"}
+        barStyle={"dark-content"}
+        showHideTransition={"fade"}
       />
       <View
         style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'absolute',
-        }}>
+          justifyContent: "center",
+          alignItems: "center",
+          position: "absolute",
+        }}
+      >
         <Lottie
           source={
-            route.params.status1 == 'success'
-              ? require('../assets/SUccess.json')
-              : require('../assets/97930-loading.json')
+            route.params.status1 == "success"
+              ? require("../assets/SUccess.json")
+              : require("../assets/97930-loading.json")
           }
           autoPlay={true}
           loop={false}
@@ -117,25 +122,27 @@ const Success = ({navigation}) => {
         />
         <Text
           style={{
-            alignSelf: 'center',
+            alignSelf: "center",
             marginTop: 50,
             fontSize: 17,
-            fontWeight: '700',
-            color: '#332F2E',
-          }}>
+            fontWeight: "700",
+            color: "#332F2E",
+          }}
+        >
           Thank you for Shopping!
         </Text>
         <Text
           style={{
-            width: '70%',
-            alignSelf: 'center',
-            textAlign: 'center',
+            width: "70%",
+            alignSelf: "center",
+            textAlign: "center",
             fontSize: 12,
-            fontWeight: '500',
-            color: '#332F2E',
+            fontWeight: "500",
+            color: "#332F2E",
             opacity: 0.5,
             marginTop: 12,
-          }}>
+          }}
+        >
           Your order has been successfully placed and has been processed for
           delivery
         </Text>
@@ -143,39 +150,43 @@ const Success = ({navigation}) => {
       <View
         style={{
           marginTop: height - 200,
-          alignItems: 'center',
-        }}>
+          alignItems: "center",
+        }}
+      >
         <TouchableOpacity
-          style={{marginHorizontal: 50}}
+          style={{ marginHorizontal: 50 }}
           onPress={() => {
-            navigation.navigate('Search');
-          }}>
+            navigation.navigate("Search");
+          }}
+        >
           <Text
             style={{
               fontSize: 15,
-              fontWeight: '600',
-              color: '#332F2E',
-            }}>
+              fontWeight: "600",
+              color: "#332F2E",
+            }}
+          >
             Continue Shopping
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={{
-            width: '77.95%',
+            width: "77.95%",
             height: 66,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: '#E94B64',
-            alignSelf: 'center',
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#E94B64",
+            alignSelf: "center",
             marginTop: 29,
             // marginTop: height - 100,
             borderRadius: 15,
-            position: 'absolute',
+            position: "absolute",
           }}
           onPress={() => {
-            navigation.navigate('Home1');
-          }}>
-          <Text style={{fontSize: 15, fontWeight: '700', color: '#FFFFFF'}}>
+            navigation.navigate("Home1");
+          }}
+        >
+          <Text style={{ fontSize: 15, fontWeight: "700", color: "#FFFFFF" }}>
             Track your order
           </Text>
         </TouchableOpacity>
