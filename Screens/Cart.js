@@ -708,7 +708,21 @@ const Cart = ({ navigation }) => {
               </View>
               <Text style={styles.TextName}>Hi Ruthran!</Text>
               <Text style={styles.TextTiming}>
-                Your oredr arriving on {chosenDate?.toDateString()} (Today)
+                Your oredr arriving on
+                {/* {chosenDate?.toDateString()} (
+                {chosenDate?.toTimeString()}) */}
+                {" " +
+                  chosenDate.toDateString() +
+                  " " +
+                  chosenDate.getHours() +
+                  ":" +
+                  chosenDate.getMinutes() +
+                  ":" +
+                  chosenDate.getSeconds()}
+                {/* {
+                  chosenDate.getDate() + chosenDate.getMonth()
+                  // chosenDate.getFullYear()
+                } */}
                 {/* {this.state.chosenDate?.toTimeString()} */}
                 {/* {this.state.chosenDate?.getHours()/this.state.chosenDate?.getMinutes() } */}
               </Text>
@@ -926,8 +940,10 @@ const Cart = ({ navigation }) => {
             mode="time"
             style={{ position: "absolute", marginLeft: 25 }}
             date={chosenDate}
-            onDateChange={(setDate) => setchosenDate(setDate)}
             is24Hour={false}
+            onDateChange={(setDate) => {
+              setchosenDate(setDate), console.log("data:" + setDate);
+            }}
           />
         </View>
 

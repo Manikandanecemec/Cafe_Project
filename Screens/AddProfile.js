@@ -72,7 +72,7 @@ export default function AddProfile({ navigation }) {
         <TextInput
           style={[styles.inputStyle, emailid != "" && styles.selinputStyle]}
           placeholder={"Enter Email Id "}
-          keyboardType={"number-pad"}
+          // keyboardType={"number-pad"}
           value={emailid}
           onChangeText={(txt) => setemailid(txt)}
         />

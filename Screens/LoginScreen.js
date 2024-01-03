@@ -37,6 +37,18 @@ const LoginScreen = ({ navigation }) => {
   const [Account, setAccount] = useState("false");
   // const [data, setdata] = useState('');
 
+  const [timer, setTimer] = useState(60); // Set the initial timer value in seconds
+  const [intervalId, setIntervalId] = useState(null);
+
+  const handleBackspace = (currentRef, prevRef) => {
+    if (currentRef.current && currentRef.current.isFocused()) {
+      currentRef.current.clear();
+      if (prevRef.current) {
+        prevRef.current.focus();
+      }
+    }
+  };
+
   useEffect(() => {
     console.log("trier useEffect");
     const otpTextConfirm = () => {
@@ -47,7 +59,36 @@ const LoginScreen = ({ navigation }) => {
       // confirmCode();
     };
     otpTextConfirm();
-  }, [pin6]);
+
+    /////////////////////////////???????????????????????????????????????
+
+    if (timer > 0) {
+      const id = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+
+      // Save the interval ID to clear it later
+      setIntervalId(id);
+    }
+
+    // Clear the interval and navigate to the ender mobile data screen when the timer is done
+    if (timer === 0) {
+      clearInterval(intervalId);
+      // Call the function to navigate to the ender mobile data screen here
+      // navigateToEndMobileDataScreen();
+      setConfirm(null);
+    }
+
+    // Cleanup the interval when the component unmounts
+    return () => clearInterval(intervalId);
+    /////////////////////////////???????????????????????????????????????
+  }, [pin6, timer]);
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+  };
 
   inputTextChange = (value) => {
     const number = phonecode + value;
@@ -287,7 +328,7 @@ const LoginScreen = ({ navigation }) => {
             activeUnderlineColor="transparent"
             onChangeText={(pin1) => {
               setpin1(pin1);
-              if (pin1 != null) {
+              if (pin1 !== "") {
                 pin2Ref.current.focus();
               }
             }}
@@ -303,8 +344,10 @@ const LoginScreen = ({ navigation }) => {
             maxLength={1}
             onChangeText={(pin2) => {
               setpin2(pin2);
-              if (pin2 != null) {
+              if (pin2 !== "") {
                 pin3Ref.current.focus();
+              } else {
+                handleBackspace(pin2Ref, pin1Ref);
               }
             }}
           />
@@ -319,8 +362,10 @@ const LoginScreen = ({ navigation }) => {
             maxLength={1}
             onChangeText={(pin3) => {
               setpin3(pin3);
-              if (pin3 != null) {
+              if (pin3 !== "") {
                 pin4Ref.current.focus();
+              } else {
+                handleBackspace(pin3Ref, pin2Ref);
               }
             }}
           />
@@ -335,8 +380,10 @@ const LoginScreen = ({ navigation }) => {
             maxLength={1}
             onChangeText={(pin4) => {
               setpin4(pin4);
-              if (pin4 != null) {
+              if (pin4 !== "") {
                 pin5Ref.current.focus();
+              } else {
+                handleBackspace(pin4Ref, pin3Ref);
               }
             }}
           />
@@ -351,8 +398,10 @@ const LoginScreen = ({ navigation }) => {
             maxLength={1}
             onChangeText={(pin5) => {
               setpin5(pin5);
-              if (pin5 != null) {
+              if (pin5 !== "") {
                 pin6Ref.current.focus();
+              } else {
+                handleBackspace(pin5Ref, pin4Ref);
               }
             }}
           />
@@ -367,6 +416,10 @@ const LoginScreen = ({ navigation }) => {
             maxLength={1}
             onChangeText={(pin6) => {
               setpin6(pin6);
+
+              if (pin6 === "") {
+                handleBackspace(pin6Ref, pin5Ref);
+              }
               console.log("trier ");
             }}
           />
@@ -381,8 +434,8 @@ const LoginScreen = ({ navigation }) => {
           <Text style={styles.btnText}>Verify and Proceed</Text>
         </TouchableOpacity>
         <Text style={styles.captionText2}>
-          Didn’t receive the OTP?
-          {/* Retry in 00.08 */}
+          Didn’t receive the OTP? Retry in {formatTime(timer)} sec
+          {/* 00.08 */}
         </Text>
       </SafeAreaView>
     </>
