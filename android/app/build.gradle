@@ -253,7 +253,7 @@ dependencies {
     // project(':react-native-html-to-pdf')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(':react-native-splash-screen')
-    // compile project(':react-native-html-to-pdf')
+    compile project(':react-native-html-to-pdf')
 
     // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
