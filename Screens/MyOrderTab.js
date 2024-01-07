@@ -20,6 +20,7 @@ import Share from "react-native-share";
 
 const MyOrderTab = ({ navigation }) => {
   const [status, setstatus] = useState("Delivered");
+  const [filePath, setFilePath] = useState("");
   const [orderData, setorderData] = useState([]);
   const [ShippingPrice, setShippingPrice] = useState("₹00.00");
   const [data, setdata] = useState([]);
@@ -539,13 +540,13 @@ const MyOrderTab = ({ navigation }) => {
         //File Name
         fileName: "Cafe" + fileName,
         //File directory
-        directory: "Documents",
+        directory: "Document",
         base64: true,
       };
       let file = await RNHTMLtoPDF.convert(options);
       let filePath =
-        RNFetchBlob.fs.dirs.DownloadDir + "/cafe " + fileName + ".pdf";
-      console.log(RNFetchBlob.fs.dirs.DownloadDir);
+        RNFetchBlob.fs.dirs.DocumentDir + "/cafe " + fileName + ".pdf";
+      console.log(RNFetchBlob.fs.dirs.DocumentDir);
       RNFetchBlob.fs
         .writeFile(filePath, file.base64, "base64")
 
@@ -558,8 +559,36 @@ const MyOrderTab = ({ navigation }) => {
 
       console.log(file.filePath);
       // alert(file.filePath);
+      setFilePath(file.filePath);
     }
   };
+  // const createPDF = async (item) => {
+  //   try {
+  //     if (await isPermitted()) {
+  //       const options = {
+  //         html: htmlstring,
+  //         fileName: "Cafe" + fileName,
+  //         directory: "Download",
+  //         base64: true,
+  //       };
+
+  //       const file = await RNHTMLtoPDF.convert(options);
+
+  //       const filePath =
+  //         RNFetchBlob.fs.dirs.DownloadDir + "/Cafe" + fileName + ".pdf";
+
+  //       console.log(RNFetchBlob.fs.dirs.DownloadDir);
+
+  //       await RNFetchBlob.fs.writeFile(filePath, file.base64, "base64");
+
+  //       console.log("Success: File saved at", filePath);
+  //       setFilePath(file.filePath);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     // Handle errors appropriately, e.g., show a user-friendly message.
+  //   }
+  // };
 
   return (
     <View style={styles.Container}>
