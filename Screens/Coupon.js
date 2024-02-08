@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -8,13 +8,13 @@ import {
   Image,
   ScrollView,
   TouchableWithoutFeedback,
-} from "react-native";
-import database from "@react-native-firebase/database";
-import auth from "@react-native-firebase/auth";
+} from 'react-native';
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
 
-import { icon } from "../Constant";
+import {icon} from '../Constant';
 
-const Coupon = ({ navigation }) => {
+const Coupon = ({navigation}) => {
   const [CouponData, setCouponData] = useState([]);
 
   function onAuthStateChanged(user) {
@@ -33,11 +33,11 @@ const Coupon = ({ navigation }) => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     // setLoading(true);
     database()
-      .ref("/Coupon")
-      .once("value")
-      .then((snapshot) => {
+      .ref('/Coupon')
+      .once('value')
+      .then(snapshot => {
         const data = snapshot.val();
-        const newData = Object.keys(data).map((key) => ({
+        const newData = Object.keys(data).map(key => ({
           id: key,
           ...data[key],
         }));
@@ -54,20 +54,19 @@ const Coupon = ({ navigation }) => {
     <View style={styles.BackgroundContainer}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <StatusBar
-          backgroundColor={"white"}
-          barStyle={"dark-content"}
-          showHideTransition={"fade"}
+          backgroundColor={'white'}
+          barStyle={'dark-content'}
+          showHideTransition={'fade'}
         />
-        <View style={{ flexDirection: "row" }}>
+        <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             style={styles.BackContainer}
             onPress={() => {
-              navigation.navigate("Home1");
-            }}
-          >
+              navigation.navigate('Home1');
+            }}>
             <Image
               source={icon.BackBotton}
-              style={{ height: 25, width: 25, marginLeft: 25 }}
+              style={{height: 25, width: 25, marginLeft: 25}}
             />
           </TouchableOpacity>
           <Text style={styles.TitleText}>Coupon</Text>
@@ -77,12 +76,11 @@ const Coupon = ({ navigation }) => {
           <TouchableWithoutFeedback
             key={index}
             onPress={() => {
-              navigation.navigate("CouponPage", {
+              navigation.navigate('CouponPage', {
                 Coupon: item,
                 datas: CouponData,
               });
-            }}
-          >
+            }}>
             <View style={styles.CouponContainer}>
               <Image
                 source={{
@@ -95,25 +93,24 @@ const Coupon = ({ navigation }) => {
                   height: 50,
                   marginTop: 33,
                   marginLeft: 32,
-                  position: "absolute",
-                  color: "#FFFBEE",
+                  position: 'absolute',
+                  // backgroundColor: '#FFFBEE',
                 }}
               />
               <View
                 style={{
                   width: 1,
                   height: 88,
-                  backgroundColor: "white",
+                  backgroundColor: 'white',
                   marginLeft: 113,
-                  position: "absolute",
+                  position: 'absolute',
                   marginTop: 15,
                   opacity: 0.2,
                   // borderStyle: 'dotted',
                   // borderheight: 1,
                   // borderRadius: 1,
                   // borderColor: 'white',
-                }}
-              ></View>
+                }}></View>
               <Text style={styles.CouponText}>{item.Code}</Text>
               <Text style={styles.CouponText1}>₹{item.Price}</Text>
               <Text style={styles.CouponText2}>
@@ -125,7 +122,7 @@ const Coupon = ({ navigation }) => {
             </View>
           </TouchableWithoutFeedback>
         ))}
-        <View style={{ height: 33 }} />
+        <View style={{height: 33}} />
       </ScrollView>
     </View>
   );
@@ -134,71 +131,71 @@ export default Coupon;
 
 const styles = StyleSheet.create({
   BackContainer: {
-    width: "100%",
+    width: '100%',
     height: 25,
-    justifyContent: "center",
+    justifyContent: 'center',
     marginTop: 15,
   },
   TitleText: {
     fontSize: 17,
-    fontWeight: "700",
-    color: "#332F2E",
+    fontWeight: '700',
+    color: '#332F2E',
     marginTop: 15,
-    left: "50%",
+    left: '50%',
     marginLeft: -44,
-    position: "absolute",
+    position: 'absolute',
   },
   BackgroundContainer: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     // alignItems: 'center',
   },
   CouponContainer: {
-    width: "73.33%",
+    width: '73.33%',
     height: 116,
-    backgroundColor: "#E94B64",
+    backgroundColor: '#E94B64',
     borderRadius: 8,
-    alignSelf: "center",
+    alignSelf: 'center',
     marginTop: 33,
   },
   CouponText: {
     fontSize: 19,
-    fontWeight: "700",
-    color: "#FFFFFF",
+    fontWeight: '700',
+    color: '#FFFFFF',
     marginTop: 21,
     marginLeft: 131,
-    position: "absolute",
+    position: 'absolute',
   },
   CouponText1: {
     fontSize: 15,
-    fontWeight: "400",
-    color: "#FFFFFF",
+    fontWeight: '400',
+    color: '#FFFFFF',
     marginTop: 47,
     marginLeft: 131,
-    position: "absolute",
+    position: 'absolute',
   },
   CouponText2: {
     fontSize: 8,
-    fontWeight: "400",
-    color: "#FFFFFF",
+    fontWeight: '400',
+    color: '#FFFFFF',
     marginTop: 89,
     marginLeft: 131,
-    position: "absolute",
+    position: 'absolute',
   },
   EllipseCoupon: {
     width: 36,
     height: 36,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 18,
     marginTop: 39,
     marginLeft: -18,
   },
   EllipseCouponleft: {
-    position: "absolute",
+    position: 'absolute',
     right: -18,
     width: 36,
     height: 36,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 18,
     marginTop: 39,
   },
