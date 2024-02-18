@@ -50,7 +50,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    console.log("trier useEffect");
+    // console.log("trier useEffect");
     const otpTextConfirm = () => {
       var otpconfirmText = pin1 + pin2 + pin3 + pin4 + pin5 + pin6;
       // console.log(otpconfirmText);

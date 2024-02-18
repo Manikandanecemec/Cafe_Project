@@ -100,6 +100,7 @@ const MyOrderTab = ({ navigation }) => {
       return true;
     }
   };
+
   let htmlstring = `
   
 
@@ -545,8 +546,8 @@ const MyOrderTab = ({ navigation }) => {
       };
       let file = await RNHTMLtoPDF.convert(options);
       let filePath =
-        RNFetchBlob.fs.dirs.DocumentDir + "/cafe " + fileName + ".pdf";
-      console.log(RNFetchBlob.fs.dirs.DocumentDir);
+        RNFetchBlob.fs.dirs.DownloadDir + "/cafe " + fileName + ".pdf";
+      console.log(RNFetchBlob.fs.dirs.DownloadDir);
       RNFetchBlob.fs
         .writeFile(filePath, file.base64, "base64")
 
