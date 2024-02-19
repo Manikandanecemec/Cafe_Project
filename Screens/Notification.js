@@ -6,19 +6,22 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-} from 'react-native';
-import React from 'react';
-import {ColorTheme, icon} from '../Constant';
-import styled from 'styled-components';
+} from "react-native";
+import React from "react";
+import { ColorTheme, icon } from "../Constant";
+import styled from "styled-components";
 
-export default function Notification({navigation}) {
+export default function Notification({ navigation }) {
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: ColorTheme.white}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: ColorTheme.white }}>
       <ScrollView>
-        <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity onPress={() => navigation.navigate('Home1')}>
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <SearchIcon>
-              <Image source={icon.BackBotton} style={{height: 26, width: 26}} />
+              <Image
+                source={icon.BackBotton}
+                style={{ height: 26, width: 26 }}
+              />
             </SearchIcon>
           </TouchableOpacity>
           <Text style={styles.TitleText}>Notification</Text>
@@ -26,18 +29,19 @@ export default function Notification({navigation}) {
         {/* <View style={styles.EllipseImage}></View> */}
         {CafeHomeSliderData.map((item, index) => (
           <View key={index}>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: "row" }}>
               <View
                 style={{
                   width: 52,
                   height: 52,
                   borderRadius: 26,
-                  backgroundColor: '#FFE1DD',
+                  backgroundColor: "#FFE1DD",
                   marginTop: 40,
                   marginLeft: 22,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <Image
                   source={icon.AppliedCoupon}
                   style={{
@@ -68,45 +72,45 @@ export default function Notification({navigation}) {
 const styles = StyleSheet.create({
   TitleText: {
     fontSize: 17,
-    fontWeight: '700',
-    color: '#332F2E',
-    position: 'absolute',
+    fontWeight: "700",
+    color: "#332F2E",
+    position: "absolute",
     marginTop: 25,
-    left: '50%',
+    left: "50%",
     marginLeft: -41,
     // alignSelf: "center",
     // backgroundColor: 'black',
   },
   NotiText: {
     fontSize: 15,
-    fontWeight: '500',
+    fontWeight: "500",
     marginTop: 42,
     marginLeft: 15,
     width: 266,
-    color: 'black',
+    color: "black",
   },
   ellipseImage: {
     width: 52,
     height: 52,
     // borderRadius: 26,
-    backgroundColor: 'black',
+    backgroundColor: "black",
     // marginTop: 40,
     // marginLeft: 22,
   },
   TimeText: {
     fontSize: 11,
-    fontWeight: '500',
-    color: 'gray',
+    fontWeight: "500",
+    color: "gray",
     marginLeft: 15,
   },
   TextContainer: {
     // flexDirection: 'coloum',
   },
   UnderContainer: {
-    width: '88.46%',
+    width: "88.46%",
     height: 1,
-    alignSelf: 'center',
-    backgroundColor: '#F0F0F0',
+    alignSelf: "center",
+    backgroundColor: "#F0F0F0",
     marginTop: 29,
   },
 });
@@ -120,12 +124,12 @@ const SearchIcon = styled.View`
 
 const CafeHomeSliderData = [
   {
-    data: 'Enjoy a 10% discount on your next purchase with code: **DISCOUNT50**',
+    data: "Enjoy a 10% discount on your next purchase with code: **DISCOUNT50**",
   },
   {
-    data: 'Enjoy a 10% discount on your next purchase with code: **DISCOUNT10**',
+    data: "Enjoy a 10% discount on your next purchase with code: **DISCOUNT10**",
   },
   {
-    data: 'Order Number: #123456 ** Date and Time: January 29, 2024, 10:30 AM',
+    data: "Order Number: #123456 ** Date and Time: January 29, 2024, 10:30 AM",
   },
 ];
