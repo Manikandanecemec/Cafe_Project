@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -9,18 +9,18 @@ import {
   ScrollView,
   FlatList,
   Dimensions,
-} from 'react-native';
-import styled from 'styled-components';
-import auth from '@react-native-firebase/auth';
-import database from '@react-native-firebase/database';
-import {ColorTheme, icon} from '../Constant';
-import firestore from '@react-native-firebase/firestore';
-import {useIsFocused} from '@react-navigation/native';
-import {useRoute} from '@react-navigation/native';
+} from "react-native";
+import styled from "styled-components";
+import auth from "@react-native-firebase/auth";
+import database from "@react-native-firebase/database";
+import { ColorTheme, icon } from "../Constant";
+import firestore from "@react-native-firebase/firestore";
+import { useIsFocused } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 
-const height = Dimensions.get('window').height;
+const height = Dimensions.get("window").height;
 
-const Testtry = ({navigation}) => {
+const Testtry = ({ navigation }) => {
   const route = useRoute();
   // setCatagory(route.params.catagory);
 
@@ -28,10 +28,10 @@ const Testtry = ({navigation}) => {
   const [loading, setLoading] = useState(false);
 
   const [CartList, setCartList] = useState([]);
-  const [Catagory, setCatagory] = useState('coffee');
+  const [Catagory, setCatagory] = useState("coffee");
   const [data, setdata] = useState([]);
   const [datlist, setDatalist] = useState([]);
-  const [condition, setcondition] = useState('false');
+  const [condition, setcondition] = useState("false");
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
@@ -50,11 +50,11 @@ const Testtry = ({navigation}) => {
     // setCatagory(Catagory);
     // console.log('efcee' + Catagory);
 
-    console.log('Test' + data);
+    console.log("Test" + data);
     if (usergetdata != null) {
       const getCartItems = async () => {
         const userId = usergetdata.uid;
-        const user = await firestore().collection('users').doc(userId).get();
+        const user = await firestore().collection("users").doc(userId).get();
         setCartList(user._data.cart);
         // saveUser();
       };
@@ -62,11 +62,11 @@ const Testtry = ({navigation}) => {
     }
 
     database()
-      .ref('/CafeCardData')
-      .once('value')
-      .then(snapshot => {
+      .ref("/CafeCardData")
+      .once("value")
+      .then((snapshot) => {
         const data = snapshot.val();
-        const newData = Object.keys(data).map(key => ({
+        const newData = Object.keys(data).map((key) => ({
           id: key,
           ...data[key],
         }));
@@ -80,28 +80,29 @@ const Testtry = ({navigation}) => {
   useEffect(() => {
     const value = route.params.catagory;
 
-    const setstatusFilter = status => {
-      console.log('SCreenVal' + status);
-      setDatalist([...data.filter(e => e.catagory == status)]);
+    const setstatusFilter = (status) => {
+      console.log("SCreenVal" + status);
+      setDatalist([...data.filter((e) => e.catagory == status)]);
     };
     setstatusFilter(value);
   }, [route.params.category, data]);
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         key={index}
         onPress={() => {
-          navigation.navigate('TestProduct', {
+          navigation.navigate("TestProduct", {
             product: item,
             datas: data,
           });
-        }}>
-        <BigContainer style={{flex: 1, backgroundColor: 'white'}}>
+        }}
+      >
+        <BigContainer style={{ flex: 1, backgroundColor: "white" }}>
           <Container>
             <ProductContainer>
               <Image
-                style={{width: '100%', height: '100%'}}
+                style={{ width: "100%", height: "100%" }}
                 source={{
                   // {this.props.url}
                   uri: item.url,
@@ -115,19 +116,19 @@ const Testtry = ({navigation}) => {
             <StarContainerall>
               <Cont>
                 <StarContainer>
-                  <StarImage source={require('../assets/star.png')} />
+                  <StarImage source={require("../assets/star.png")} />
                 </StarContainer>
                 <StarContainer>
-                  <StarImage source={require('../assets/star.png')} />
+                  <StarImage source={require("../assets/star.png")} />
                 </StarContainer>
                 <StarContainer>
-                  <StarImage source={require('../assets/star.png')} />
+                  <StarImage source={require("../assets/star.png")} />
                 </StarContainer>
                 <StarContainer>
-                  <StarImage source={require('../assets/stargray.png')} />
+                  <StarImage source={require("../assets/stargray.png")} />
                 </StarContainer>
                 <StarContainer>
-                  <StarImage source={require('../assets/stargray.png')} />
+                  <StarImage source={require("../assets/stargray.png")} />
                 </StarContainer>
               </Cont>
               <RatingText>
@@ -143,7 +144,7 @@ const Testtry = ({navigation}) => {
             </PriceText>
 
             {AddCondition == item.id ? (
-              <View style={{position: 'absolute'}}>
+              <View style={{ position: "absolute" }}>
                 <CartaddContainer>
                   <TouchableOpacity
                     onPress={() => {
@@ -155,11 +156,12 @@ const Testtry = ({navigation}) => {
                       // } else {
                       //   deleteitermfromCart(index);
                       // }
-                    }}>
+                    }}
+                  >
                     <AddContainer>
                       <Image
                         source={icon.Minus}
-                        style={{height: 15, width: 15}}
+                        style={{ height: 15, width: 15 }}
                       />
                     </AddContainer>
                   </TouchableOpacity>
@@ -170,12 +172,13 @@ const Testtry = ({navigation}) => {
 
                   <TouchableOpacity
                     onPress={() => {
-                      addItemToCart(item), setcondition('false');
-                    }}>
+                      addItemToCart(item), setcondition("false");
+                    }}
+                  >
                     <SubContainer>
                       <Image
                         source={icon.Addition}
-                        style={{height: 15, width: 15}}
+                        style={{ height: 15, width: 15 }}
                       />
                     </SubContainer>
                   </TouchableOpacity>
@@ -185,7 +188,7 @@ const Testtry = ({navigation}) => {
             ) : (
               <TouchableOpacity
                 style={{
-                  position: 'absolute',
+                  position: "absolute",
                   right: 37.58,
                   marginTop: 50,
                 }}
@@ -193,13 +196,14 @@ const Testtry = ({navigation}) => {
                   setAddCondition(item.id);
                   addItemToCart(item);
                   // console.log(item);
-                }}>
+                }}
+              >
                 <Image
                   source={icon.Ellipsewithplus}
                   style={{
                     height: 39.42,
                     width: 39.42,
-                    alignSelf: 'center',
+                    alignSelf: "center",
                   }}
                 />
               </TouchableOpacity>
@@ -209,7 +213,7 @@ const Testtry = ({navigation}) => {
               <PerIconC>
                 <Image
                   source={icon.Coupon}
-                  style={{height: 9.25, width: 9.25}}
+                  style={{ height: 9.25, width: 9.25 }}
                 />
               </PerIconC>
               <PerTextC>
@@ -251,63 +255,63 @@ const Testtry = ({navigation}) => {
   }
   console.log(Useruid);
 
-  const addItemToCart = async item => {
+  const addItemToCart = async (item) => {
     const userId = Useruid;
-    const user = await firestore().collection('users').doc(userId).get();
+    const user = await firestore().collection("users").doc(userId).get();
     let tempDart = [];
     console.log(tempDart);
     tempDart = user._data.cart;
     if (tempDart.length > 0) {
       let existing = false;
-      tempDart.map(itm => {
+      tempDart.map((itm) => {
         if (itm.id == item.id) {
           itm.qty = itm.qty + 1;
           existing = true;
-          console.log('existing to cart from catagory coffe screen');
+          console.log("existing to cart from catagory coffe screen");
         }
-        firestore().collection('users').doc(userId).update({
+        firestore().collection("users").doc(userId).update({
           cart: tempDart,
         });
       });
       if (existing == false) {
         tempDart.push(item);
-        console.log('Added new to cart');
+        console.log("Added new to cart");
       }
     } else {
       tempDart.push(item);
     }
-    firestore().collection('users').doc(userId).update({
+    firestore().collection("users").doc(userId).update({
       cart: tempDart,
     });
     // setCartList(user._data.cart);
   };
 
-  const deleteitermfromCart = async index => {
+  const deleteitermfromCart = async (index) => {
     const userId = Useruid;
-    const user = await firestore().collection('users').doc(userId).get();
+    const user = await firestore().collection("users").doc(userId).get();
     let tempDart = [];
     tempDart = user._data.cart;
     tempDart.splice(index, 1);
-    firestore().collection('users').doc(userId).update({
+    firestore().collection("users").doc(userId).update({
       cart: tempDart,
     });
     // setCartList(user._data.cart);
   };
 
-  const RemoveitemfromCart = async item => {
+  const RemoveitemfromCart = async (item) => {
     const userId = Useruid;
     // console.log(item);
-    const user = await firestore().collection('users').doc(userId).get();
+    const user = await firestore().collection("users").doc(userId).get();
     let tempDart = [];
     console.log(tempDart);
     tempDart = user._data.cart;
     if (tempDart.length > 0) {
-      tempDart.map(itm => {
+      tempDart.map((itm) => {
         if (itm.id == item.id) {
           itm.qty = itm.qty - 1;
-          console.log('Remove from cart');
+          console.log("Remove from cart");
         }
-        firestore().collection('users').doc(userId).update({
+        firestore().collection("users").doc(userId).update({
           cart: tempDart,
         });
       });
@@ -318,7 +322,7 @@ const Testtry = ({navigation}) => {
 
   const getTotal = () => {
     let total = 0;
-    CartList.map(item => {
+    CartList.map((item) => {
       total = total + item.qty * item.price;
     });
     return total;
@@ -329,26 +333,15 @@ const Testtry = ({navigation}) => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: ColorTheme.white}}>
-      {/* <ScrollView> */}
-      {/* <TouchableOpacity
-        onPress={() => {
-          this.props.navigation.goBack();
-        }}>
-        <SearchIcon>
-          <Image source={icon.BackBotton} style={{height: 26, width: 26}} />
-        </SearchIcon>
-      </TouchableOpacity>
-      <ProductNameContainer>
-        <Text style={styles.productText}>{route.params.catagory}</Text>
-      </ProductNameContainer> */}
+    <SafeAreaView style={{ flex: 1, backgroundColor: ColorTheme.white }}>
       <View style={styles.btnBarContainer}>
         <TouchableOpacity
           onPress={() => {
             navigation.goBack();
-          }}>
+          }}
+        >
           <SearchIcon>
-            <Image source={icon.BackBotton} style={{height: 26, width: 26}} />
+            <Image source={icon.BackBotton} style={{ height: 26, width: 26 }} />
           </SearchIcon>
         </TouchableOpacity>
         <ProductNameContainer>
@@ -360,39 +353,35 @@ const Testtry = ({navigation}) => {
         keyExtractor={(e, i) => i.toString()}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
-        // scrollEnabled={false}
-        // scrollEnabled={true}
-        // listMode="SCROLLVIEW"
-        // listMode="MODAL"
       />
 
-      {/* </ScrollView> */}
-
-      {CartList.length > 0 ? <View style={{height: 80}} /> : null}
+      {CartList.length > 0 ? <View style={{ height: 80 }} /> : null}
 
       {CartList.length > 0 ? (
         <View
           style={{
-            width: '89.74%',
+            width: "89.74%",
             height: 66,
 
-            position: 'absolute',
-            alignSelf: 'center',
+            position: "absolute",
+            alignSelf: "center",
             borderRadius: 15,
-            backgroundColor: '#E94B64',
+            backgroundColor: "#E94B64",
             borderRadius: 15,
 
             marginTop: height - 110,
-            justifyContent: 'center',
-          }}>
+            justifyContent: "center",
+          }}
+        >
           <Text style={styles.itemText}>
             {CartList.length} Items | ₹{getTotal()}
           </Text>
           <TouchableOpacity
             style={styles.ViewCartContainer}
             onPress={() => {
-              navigation.push('Cart');
-            }}>
+              navigation.push("Cart");
+            }}
+          >
             <Text style={styles.cartText}>View cart</Text>
           </TouchableOpacity>
         </View>
@@ -623,63 +612,63 @@ const CustomText = styled.Text`
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   ProductContainer: {
-    width: '100%',
+    width: "100%",
     height: 378,
-    backgroundColor: '#FDF8F4',
+    backgroundColor: "#FDF8F4",
     borderBottomLeftRadius: 63,
     borderBottomRightRadius: 63,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   ImageContainer: {
     width: 250,
     height: 250,
   },
   Image: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   productText: {
     fontSize: 15,
 
-    fontWeight: '700',
-    color: '#332F2E',
-    position: 'absolute',
+    fontWeight: "700",
+    color: "#332F2E",
+    position: "absolute",
   },
 
   btnBarContainer: {
-    width: '100%',
+    width: "100%",
     height: 25,
     // position: 'absolute',
     marginTop: 32,
     marginBottom: 15,
   },
   incrementContainer: {
-    width: '100%',
+    width: "100%",
     height: 107,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   tiltleText: {
-    color: '#332F2E',
-    fontWeight: '700',
+    color: "#332F2E",
+    fontWeight: "700",
     fontSize: 17,
     marginLeft: 19,
   },
   listContainer: {
     width: 350,
     height: 55,
-    backgroundColor: '#EDD99C1C',
+    backgroundColor: "#EDD99C1C",
     marginLeft: 20,
     marginTop: 8,
     opacity: 0.9,
     borderRadius: 4,
-    alignContent: 'center',
+    alignContent: "center",
     // justifyContent:"center",
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 10,
   },
   btnContainer: {
@@ -688,64 +677,64 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginLeft: 6,
     marginRight: 21,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 5,
   },
   btnContainerActive: {
     // width:"24.36%",
     // height:45,
-    backgroundColor: '#FAECBF',
-    borderColor: '#FFB90A',
+    backgroundColor: "#FAECBF",
+    borderColor: "#FFB90A",
     borderRadius: 4,
     borderWidth: 0.5,
   },
   btnText: {
-    color: '#332F2E',
+    color: "#332F2E",
     fontSize: 15,
-    fontWeight: '400',
+    fontWeight: "400",
   },
   btnTextActive: {
     fontSize: 15,
-    fontWeight: '600',
-    color: '#332F2E',
+    fontWeight: "600",
+    color: "#332F2E",
   },
   priceBarContainer: {
-    width: '89.74%',
+    width: "89.74%",
     width: 350,
     height: 66,
     // marginTop: 35,
-    backgroundColor: '#E94B64',
+    backgroundColor: "#E94B64",
     borderRadius: 15,
-    left: '50%',
-    marginLeft: '-44.87%',
+    left: "50%",
+    marginLeft: "-44.87%",
 
     marginBottom: 20,
-    justifyContent: 'center',
+    justifyContent: "center",
     // position: 'absolute',
   },
   itemText: {
     fontSize: 17,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontWeight: "700",
+    color: "#FFFFFF",
     marginLeft: 25,
   },
   ViewCartContainer: {
     // width:80,
     // height:28,
     // backgroundColor:"white",
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
     right: 28,
   },
 
   cartText: {
     fontSize: 17,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontWeight: "700",
+    color: "#FFFFFF",
     marginLeft: 25,
     right: 28,
-    position: 'absolute',
+    position: "absolute",
   },
 });

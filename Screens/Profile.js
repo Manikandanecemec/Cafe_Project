@@ -14,6 +14,7 @@ import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import { COLORS, icon } from "../Constant";
 import { useIsFocused } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import database from "@react-native-firebase/database";
 
 const screenHeight = Dimensions.get("window").height;
@@ -34,10 +35,13 @@ export default function Profile({ navigation }) {
   var name, email, photoUrl, uid, emailVerified;
 
   useEffect(() => {
-    // getItem();
-    // console.log(user.phoneNumber);
-    // console.log("data");
-    // getUserDetails();
+    const UserProfile = async () => {
+      const Name = await AsyncStorage.getItem("Name");
+      const Mobilenumber = await AsyncStorage.getItem("Mobilenumber");
+      setName(Name);
+      setmobilenumber(Mobilenumber);
+    };
+    UserProfile();
 
     const AddProfileData = async () => {
       const userId = user.uid;
@@ -48,6 +52,8 @@ export default function Profile({ navigation }) {
       setmobilenumber(tempDart.mobile);
       setEmail(tempDart.email);
       setuidid(tempDart.uid);
+      await AsyncStorage.setItem("Name", tempDart.name);
+      await AsyncStorage.setItem("Mobilenumber", tempDart.mobile);
       // console.log('222222' + tempDart.password);
       // tempDart.push({});
     };
