@@ -6,9 +6,9 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
-  FlatList,
   StatusBar,
   PermissionsAndroid,
+  Dimensions,
 } from "react-native";
 import { icon } from "../Constant";
 import RNHTMLtoPDF from "react-native-html-to-pdf";
@@ -18,18 +18,18 @@ import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import Share from "react-native-share";
 
+const height = Dimensions.get("window").height;
+
 const MyOrderTab = ({ navigation }) => {
   const [status, setstatus] = useState("Delivered");
   const [filePath, setFilePath] = useState("");
-  const [orderData, setorderData] = useState([]);
-  const [ShippingPrice, setShippingPrice] = useState("₹00.00");
   const [data, setdata] = useState([]);
 
-  const [fileName, setfilename] = useState("2222222");
   const isFocused = useIsFocused();
   const [oredrList, setOrderList] = useState([
     ...data.filter((e) => e.status == status),
   ]);
+  const [downloadNotification, setdownloadNotification] = useState("false");
   const usergetdata = auth().currentUser;
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const MyOrderTab = ({ navigation }) => {
         const user = await firestore().collection("users").doc(userId).get();
         // setOrderList(user._data.orders);
         setdata(user._data.orders);
-        console.log(oredrList);
+        // console.log(oredrList);
         // setLoading(false);
       };
       getOrderItems();
@@ -67,18 +67,6 @@ const MyOrderTab = ({ navigation }) => {
     }
     setstatus(status);
   };
-
-  // const createPDF = async () => {
-  //   let options = {
-  //     html: '<h1>PDF TEST</h1>',
-  //     fileName: 'test2',
-  //     directory: 'Download',
-  //   };
-
-  //   let file = await RNHTMLtoPDF.convert(options);
-  //   console.log(file.filePath);
-  //   alert(file.filePath);
-  // };
   const isPermitted = async () => {
     if (Platform.OS === "android") {
       try {
@@ -120,10 +108,9 @@ const MyOrderTab = ({ navigation }) => {
   };
 
   const createPDF = async (item) => {
+    // console.log("createpdf function logs " + item.orderTotal);
     const htmlstring = `
   
-  
-
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title> Order confirmation </title>
     <meta name="robots" content="noindex,nofollow" />
@@ -194,7 +181,7 @@ const MyOrderTab = ({ navigation }) => {
                             </tr>
                             <tr>
                               <td style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: left;">
-                                Hello, Mr.${data[0].address[0].Name}.
+                                Hello, Mr.${item.address[0].Name}.
                                 <br> Thank you for shopping from App and for your order.
                               </td>
                             </tr>
@@ -222,9 +209,13 @@ const MyOrderTab = ({ navigation }) => {
                             </tr>
                             <tr>
                               <td style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: right;">
-                                <small>ORDERID:</small> ${data[0].orderID}<br />
-                                <small>ORDERNUMBER:</small> ${data[0].ordernumber}<br />
-                                <small>ARRAIVINGAT:</small> ${data[0].arrrivingAT}<br />
+                                <small>ORDERID:</small> ${item.orderID}<br />
+                                <small>ORDERNUMBER:</small> ${
+                                  item.ordernumber
+                                }<br />
+                                <small>ARRAIVINGAT:</small> ${
+                                  item.arrrivingAT
+                                }<br />
                                 <small>MARCH 4TH 2016</small>
                               </td>
                             </tr>
@@ -279,18 +270,24 @@ const MyOrderTab = ({ navigation }) => {
                         <tr>
                           <td height="10" colspan="4"></td>
                         </tr>
-                        <tr>
-                          <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #ff0000;  line-height: 18px;  vertical-align: top; padding:10px 0;" class="article">
-                            
-                            ${data[0].items[0].productName}
-                          </td>
-                          <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e;  line-height: 18px;  vertical-align: top; padding:10px 0;"><small>MH792AM/A</small></td>
-                          <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e;  line-height: 18px;  vertical-align: top; padding:10px 0;" align="center">1</td>
-                          <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0;" align="right">${data[0].items[0].price}</td>
-                        </tr>
-                        <tr>
-                          <td height="1" colspan="4" style="border-bottom:1px solid #e4e4e4"></td>
-                        </tr>
+                        
+  ${item.items.map(
+    (productItem) => `
+    <tr>
+      <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #ff0000;  line-height: 18px;  vertical-align: top; padding:10px 0;" class="article">
+        ${productItem.productName}
+      </td>
+      <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e;  line-height: 18px;  vertical-align: top; padding:10px 0;"><small>MH792AM/A</small></td>
+      <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e;  line-height: 18px;  vertical-align: top; padding:10px 0;" align="center">1</td>
+      <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0;" align="right">₹${productItem.price}</td>
+    </tr>
+    <tr>
+      <td height="1" colspan="4" style="border-bottom:1px solid #e4e4e4"></td>
+    </tr>
+  `
+  )}
+
+                        
                    
                       </tbody>
                     </table>
@@ -325,7 +322,7 @@ const MyOrderTab = ({ navigation }) => {
                           </td>
                           <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 22px; vertical-align: top; text-align:right; white-space:nowrap;" width="80">
                           
-                          ${data[0].orderTotal}
+                          ₹${item.orderTotal}
                           
                           </td>
                         </tr>
@@ -334,22 +331,23 @@ const MyOrderTab = ({ navigation }) => {
                             Shipping &amp; Handling
                           </td>
                           <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 22px; vertical-align: top; text-align:right; ">
-                          ${ShippingPrice}
+                          <small>₹00.00</small>
                           </td>
                         </tr>
+                        <tr>
+                        <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #b0b0b0; line-height: 22px; vertical-align: top; text-align:right; "><small>TAX</small></td>
+                        <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #b0b0b0; line-height: 22px; vertical-align: top; text-align:right; ">
+                          <small>₹00.00</small>
+                        </td>
                         <tr>
                           <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #000; line-height: 22px; vertical-align: top; text-align:right; ">
                             <strong>Grand Total (Incl.Tax)</strong>
                           </td>
                           <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #000; line-height: 22px; vertical-align: top; text-align:right; ">
-                            <strong>${data[0].orderTotal}</strong>
+                            <strong>₹${item.orderTotal}</strong>
                           </td>
                         </tr>
-                        <tr>
-                          <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #b0b0b0; line-height: 22px; vertical-align: top; text-align:right; "><small>TAX</small></td>
-                          <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #b0b0b0; line-height: 22px; vertical-align: top; text-align:right; ">
-                            <small>₹00.00</small>
-                          </td>
+                       
                         </tr>
                       </tbody>
                     </table>
@@ -455,7 +453,11 @@ const MyOrderTab = ({ navigation }) => {
                                 </tr>
                                 <tr>
                                   <td style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #5b5b5b; line-height: 20px; vertical-align: top; ">
-                                    Mr.${data[0].address[0].Name}<br> ${data[0].address[0].DoorNumber}, ${data[0].address[0].Street},<br> villupuram,<br> Tamilnadu,${data[0].address[0].Pincode}<br>+91 ${data[0].address[0].mobile}
+                                    Mr.${item.address[0].Name}<br> ${
+      item.address[0].DoorNumber
+    }, ${item.address[0].Street},<br> villupuram,<br> Tamilnadu,${
+      item.address[0].Pincode
+    }<br>+91 ${item.address[0].mobile}
                                   </td>
                                 </tr>
                               </tbody>
@@ -542,14 +544,14 @@ const MyOrderTab = ({ navigation }) => {
         //Content to print
         html: htmlstring,
         //File Name
-        fileName: "Cafe" + fileName,
+        fileName: "Cafe" + item.orderID,
         //File directory
         directory: "Document",
         base64: true,
       };
       let file = await RNHTMLtoPDF.convert(options);
       let filePath =
-        RNFetchBlob.fs.dirs.DownloadDir + "/cafe " + fileName + ".pdf";
+        RNFetchBlob.fs.dirs.DownloadDir + "/cafe " + item.orderID + ".pdf";
       console.log(RNFetchBlob.fs.dirs.DownloadDir);
       RNFetchBlob.fs
         .writeFile(filePath, file.base64, "base64")
@@ -560,40 +562,13 @@ const MyOrderTab = ({ navigation }) => {
         .catch((response) => {
           console.log("error log:", response);
         });
+      setdownloadNotification("true");
+      setTimeout(() => setdownloadNotification("false"), 1500);
 
       console.log(file.filePath);
-      // alert(file.filePath);
       setFilePath(file.filePath);
-      // const itemsValue = orderData[0].items.orderID;
     }
   };
-  // const createPDF = async (item) => {
-  //   try {
-  //     if (await isPermitted()) {
-  //       const options = {
-  //         html: htmlstring,
-  //         fileName: "Cafe" + fileName,
-  //         directory: "Download",
-  //         base64: true,
-  //       };
-
-  //       const file = await RNHTMLtoPDF.convert(options);
-
-  //       const filePath =
-  //         RNFetchBlob.fs.dirs.DownloadDir + "/Cafe" + fileName + ".pdf";
-
-  //       console.log(RNFetchBlob.fs.dirs.DownloadDir);
-
-  //       await RNFetchBlob.fs.writeFile(filePath, file.base64, "base64");
-
-  //       console.log("Success: File saved at", filePath);
-  //       setFilePath(file.filePath);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //     // Handle errors appropriately, e.g., show a user-friendly message.
-  //   }
-  // };
 
   return (
     <View style={styles.Container}>
@@ -612,7 +587,6 @@ const MyOrderTab = ({ navigation }) => {
             style={{ height: 25, width: 25, marginLeft: 25 }}
           />
         </TouchableOpacity>
-        {/* <Text style={styles.TitleText}>My Orders</Text> */}
         <Text style={styles.TitleText}>My Orders</Text>
       </View>
       <View style={styles.listContainer}>
@@ -636,12 +610,12 @@ const MyOrderTab = ({ navigation }) => {
           </TouchableOpacity>
         ))}
       </View>
-      {oredrList == null ? (
+      {oredrList == "" ? (
         <Text
           style={{
             alignSelf: "center",
-            marginTop: 30,
-            fontWeight: "700",
+            marginTop: 300,
+            fontWeight: "500",
             color: "black",
             fontSize: 17,
           }}
@@ -671,11 +645,8 @@ const MyOrderTab = ({ navigation }) => {
                 </View>
                 <View style={styles.statusContainer2}>
                   <TouchableOpacity
-                    onPress={(item) => {
-                      createPDF(item), setorderData(item);
-                      // setfilename(item.orderID);
-                      console.log("FIleName:" + item);
-                      console.log("orderdata00" + item.orderID);
+                    onPress={() => {
+                      createPDF(item); // The specific order data is pass the createPDF function
                     }}
                   >
                     <Image
@@ -732,15 +703,15 @@ const MyOrderTab = ({ navigation }) => {
                     {item.Numberofitems}
                   </Text>
                   <Text style={styles.orderDynamicText5}>{item.status}</Text>
-                  {/* <Image
-                  source={item.icons}
-                  style={{
-                    width: 11,
-                    height: 11,
-                    marginTop: 38,
-                    marginLeft: 200,
-                  }}
-                /> */}
+                  <Image
+                    source={icon[item.status]}
+                    style={{
+                      width: 11,
+                      height: 11,
+                      marginTop: 38,
+                      marginLeft: 190,
+                    }}
+                  />
                 </View>
                 <View style={{ flexDirection: "row" }}>
                   <TouchableOpacity style={styles.btnCancel}>
@@ -754,6 +725,29 @@ const MyOrderTab = ({ navigation }) => {
             </TouchableOpacity>
           ))}
         </ScrollView>
+      )}
+
+      {downloadNotification == "true" ? (
+        <View
+          style={{
+            width: "89.74%",
+            height: 66,
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            alignSelf: "center",
+            borderRadius: 15,
+            backgroundColor: "#fdf8f4",
+            borderRadius: 15,
+
+            marginTop: height - 105,
+            justifyContent: "center",
+          }}
+        >
+          <Text style={styles.itemText}>Downloaded..</Text>
+        </View>
+      ) : (
+        <View></View>
       )}
 
       {/* <FlatList
@@ -976,6 +970,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     color: "#FFFFFF",
+  },
+  itemText: {
+    fontSize: 17,
+    fontWeight: "500",
+    color: "#E94B64",
+    marginLeft: 25,
   },
 });
 

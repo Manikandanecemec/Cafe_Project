@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -20,34 +20,25 @@ import firestore from "@react-native-firebase/firestore";
 const height = Dimensions.get("window").height;
 
 const Success = ({ navigation }) => {
+  const [customerOrderID, setcustomerOrderID] = useState("");
+  const [customerOrderNumber, setcustomerOrderNumber] = useState("");
+
   const route = useRoute();
-  // const route = this.props.route.params.product;
 
   useEffect(() => {
     if (route.params.status1 == "success") {
       placeOrder();
-      // console.log('sucess screen' + route.params.userId);
     }
-    // status: 'success',
-    //             paymentId: data.razorpay_payment_id,
-    //             cartList: CartList,
-    //             total: getTotal(),
-    //             address: selectedAddress,
-    //             userId: usergetdata.uid,
-    //             userName: Name,
-    //             userEmail: email,
-    //             userMobile: mobile,
   }, []);
   const placeOrder = async () => {
+    setcustomerOrderID(route.params.orderID);
+    setcustomerOrderNumber(route.params.ordernumber);
+
     console.log("sucess screen" + route.params.userId);
     const user = await firestore()
       .collection("users")
       .doc(route.params.userId)
       .get();
-    // let user = await firestore()
-    //   .collection('users')
-    //   .doc(route.params.userId)
-    //   .get();
     let tempOver = [];
     tempOver = user._data.orders;
     tempOver.push({
@@ -66,6 +57,8 @@ const Success = ({ navigation }) => {
       status: route.params.status,
       Numberofitems: route.params.Numberofitems,
     });
+
+    // console.log("sucessscreen id" + customerOrderID);
     firestore().collection("users").doc(route.params.userId).update({
       cart: [],
       CartTotal: "",
@@ -88,6 +81,22 @@ const Success = ({ navigation }) => {
           paymentId: route.params.paymentId,
         },
         orderBy: route.params.userId,
+      });
+    // Fetch current orderID and increment it by 1
+    const orderDetailsDoc = await firestore()
+      .collection("OderDetails")
+      .doc("cafe")
+      .get();
+    const currentOrderID = orderDetailsDoc.data().orderID;
+    const nextOrderID = currentOrderID + 1;
+
+    // Update orderID and orderNumber in OderDetails document
+    await firestore()
+      .collection("OderDetails")
+      .doc("cafe")
+      .update({
+        orderID: nextOrderID,
+        orderNumber: customerOrderNumber + 1,
       });
   };
 

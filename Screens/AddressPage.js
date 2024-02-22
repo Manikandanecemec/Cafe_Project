@@ -28,6 +28,8 @@ const AddressPage = ({ navigation }) => {
   const [email, setemail] = useState("");
   const [Name, setName] = useState("");
   const [userId, setuserId] = useState("");
+  const [orderId, setorderId] = useState("");
+  const [oredrNumber, setoredrNumber] = useState("");
   const [CartTotal, setCartTotal] = useState("");
   const [CouponCode, setCouponCode] = useState("");
   const [orderComment, setorderComment] = useState("");
@@ -36,7 +38,14 @@ const AddressPage = ({ navigation }) => {
   useEffect(() => {
     getAddressList();
     getCartItems();
+    getorderDetails();
   }, [isFocused]);
+
+  const getorderDetails = async () => {
+    const user = await firestore().collection("OderDetails").doc("cafe").get();
+    setorderId(user._data.orderID);
+    setoredrNumber(user._data.oredrNumber);
+  };
 
   const getCartItems = async () => {
     const userId = usergetdata.uid;
@@ -44,37 +53,12 @@ const AddressPage = ({ navigation }) => {
     setCartList(user._data.cart);
     setmobile(user._data.mobile);
     setName(user._data.name);
-    setuserId(user._data.userId);
     setemail(user._data.userId);
     setCartTotal(user._data.CartTotal);
     setCouponCode(user._data.CouponCode);
     setorderComment(user._data.orderComment);
     SetcouponValue(user._data.couponValue);
   };
-
-  const getTotal = () => {
-    let total = 0;
-    CartList.map((item) => {
-      total = total + item.qty * item.price;
-    });
-    return total;
-  };
-  // const getAddressList = async () => {
-  //   const userId = usergetdata.uid;
-  //   const user = await firestore().collection('users').doc(userId).get();
-  //   let tempDart = [];
-  //   tempDart = user._data.address;
-  //   // setAdressdata(tempDart);
-  //   // console.log(tempDart);
-  //   // tempDart.map(item => {
-  //   //   if (item.addressId == addressId) {
-  //   //     item.selected = true;
-  //   //   } else {
-  //   //     item.selected = false;
-  //   //   }
-  //   // });
-  //   setAdressdata(tempDart);
-  // };
 
   const saveDeafultAddress = async (item) => {
     // console.log(item.addressId);
@@ -107,16 +91,6 @@ const AddressPage = ({ navigation }) => {
     tempDart = user._data.address;
     tempDart.map((item) => {
       if (item.addressId == addressId) {
-        // setSelectedAddress(
-        //   item,
-        //   // item.street +
-        //   //   ',' +
-        //   //   item.city +
-        //   //   ',' +
-        //   //   item.pincode +
-        //   //   ',' +
-        //   //   item.mobile,
-        // );
         let temp = [];
         temp.push(item);
         setSelectedAddress(temp);
@@ -322,14 +296,16 @@ const AddressPage = ({ navigation }) => {
                 CouponCode: CouponCode,
                 orderComment: orderComment,
                 couponValue: couponValue,
-                orderID: "1234567",
-                ordernumber: "98695951",
+
+                orderID: orderId,
+
+                ordernumber: oredrNumber,
                 arrrivingAT: "18min Left (Today)",
                 Numberofitems: CartList.length,
-                // status: 'In progress',
-                status: "Delivered",
+                status: "In progress",
+                // status: "Delivered",
               });
-              console.log(data);
+              console.log(`Success: ${data.razorpay_payment_id}`);
               // alert(`Success: ${data.razorpay_payment_id}`);
             })
             .catch((error) => {

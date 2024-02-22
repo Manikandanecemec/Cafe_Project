@@ -344,7 +344,9 @@ const Cart = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         {AppliedCouponValue == "0" ? (
-          <Text style={{ marginLeft: 40, color: "red" }}>*Invalied Coupon</Text>
+          <Text style={{ marginLeft: 40, paddingTop: 5, color: "red" }}>
+            *Invalied Coupon
+          </Text>
         ) : (
           <View
             style={{
