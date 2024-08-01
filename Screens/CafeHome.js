@@ -200,7 +200,7 @@ const CafeHome = ({ navigation }) => {
               // alignSelf: 'center',
             }}
           >
-            Cafe
+            Cafe!
           </Text>
           <Image
             source={icon.Cart}
@@ -357,7 +357,14 @@ const CafeHome = ({ navigation }) => {
             source={icon.HomeSCreenCoupon}
             style={{ height: 56, width: 78.07 }}
           />
-          <Text style={{ fontSize: 14, fontWeight: "700", color: "#332F2E" }}>
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: "700",
+              // fontFamily: "Poppins-ExtraLight",
+              color: "#332F2E",
+            }}
+          >
             Prices smashed with offer zone
           </Text>
           <Image
