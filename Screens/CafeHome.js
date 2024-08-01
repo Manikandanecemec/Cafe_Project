@@ -200,7 +200,7 @@ const CafeHome = ({ navigation }) => {
               // alignSelf: 'center',
             }}
           >
-            Cafe!
+            Cafe
           </Text>
           <Image
             source={icon.Cart}
